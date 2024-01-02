@@ -175,15 +175,9 @@ class _SignUpPageState extends State<SignUpPage> {
           suffixConstraints: BoxConstraints(maxHeight: 60.v),
           obscureText: true,
           contentPadding: EdgeInsets.symmetric(vertical: 21.v)),
-      SizedBox(height: 20.v),
-      CustomCheckboxButton(
-          text: "Remember me",
-          value: rememberme,
-          padding: EdgeInsets.symmetric(vertical: 3.v),
-          onChange: (value) {
-            rememberme = value;
-          }),
-      SizedBox(height: 20.v),
+      SizedBox(height: 25.v),
+
+      SizedBox(height: 30.v),
       CustomElevatedButton(
           text: "Sign Up",
           onPressed: () {
@@ -194,23 +188,18 @@ class _SignUpPageState extends State<SignUpPage> {
 
   /// Section Widget
   Widget _buildOrDivider(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.h),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Padding(padding: EdgeInsets.symmetric(horizontal: 10.h),
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
+              Padding(padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
                   child: SizedBox(width: 96.h, child: Divider())),
               Text("or continue with",
                   style: CustomTextStyles.titleMediumGray50),
-              Padding(
-                  padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
+              Padding(padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
                   child: SizedBox(width: 96.h, child: Divider()))
             ]));
   }
-
   /// Section Widget
   Widget _buildSocial(BuildContext context) {
     return Padding(

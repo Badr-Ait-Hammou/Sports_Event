@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
-import 'package:sport_events/pages/operation_page/widgets/bookingongoing_item_widget.dart';
+import 'package:sport_events/pages/operation_page/widgets/eventsPage.dart';
 import '../../../theme/app_decoration.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
 import '../../components/app_bar/appbar_title.dart';
@@ -10,15 +10,15 @@ import '../../core/utils/image_constant.dart';
 import '../../routes/app_routes.dart';
 
 
-class BookingOngoingPage extends StatefulWidget {
-  const BookingOngoingPage({Key? key}) : super(key: key);
+class EventsOngoingPage extends StatefulWidget {
+  const EventsOngoingPage({Key? key}) : super(key: key);
 
   @override
-  BookingOngoingPageState createState() => BookingOngoingPageState();
+  EventsOngoingPageState createState() => EventsOngoingPageState();
 }
 
-class BookingOngoingPageState extends State<BookingOngoingPage>
-    with AutomaticKeepAliveClientMixin<BookingOngoingPage> {
+class EventsOngoingPageState extends State<EventsOngoingPage>
+    with AutomaticKeepAliveClientMixin<EventsOngoingPage> {
   @override
   bool get wantKeepAlive => true;
 

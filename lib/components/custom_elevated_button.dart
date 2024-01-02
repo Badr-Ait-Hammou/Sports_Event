@@ -3,7 +3,6 @@ import 'package:sport_events/core/utils/size_utils.dart';
 import '../theme/custom_text_style.dart';
 import 'base_button.dart';
 
-
 class CustomElevatedButton extends BaseButton {
   CustomElevatedButton({
     Key? key,

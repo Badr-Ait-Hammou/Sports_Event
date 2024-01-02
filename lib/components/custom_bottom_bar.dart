@@ -33,8 +33,8 @@ class CustomBottomBarState extends State<CustomBottomBar> {
     BottomMenuModel(
       icon: ImageConstant.imgNavBooking,
       activeIcon: ImageConstant.imgNavBooking,
-      title: "Booking",
-      type: BottomBarEnum.Booking,
+      title: "Events",
+      type: BottomBarEnum.Events,
     ),
     BottomMenuModel(
       icon: ImageConstant.imgNavProfile,
@@ -122,7 +122,7 @@ class CustomBottomBarState extends State<CustomBottomBar> {
 enum BottomBarEnum {
   Home,
   //Search,
-  Booking,
+  Events,
   Profile,
 }
 

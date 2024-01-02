@@ -6,7 +6,6 @@ class ImageConstant {
   static String splashimg1 = '$imagePath/sp1.jpg';
   static String splashimg2 = '$imagePath/sp2.jpg';
 
-  // Onboarding One images
   static String imgRectangle1420x428 = '$imagePath/img_rectangle_1_420x428.png';
 
   // Onboarding Two images
@@ -58,7 +57,6 @@ class ImageConstant {
 
   static String imgRectangle3400x300 = '$imagePath/img_rectangle_3_400x300.png';
 
-  // Notifications images
   static String imgClockPrimary = '$imagePath/img_clock_primary.svg';
 
   static String imgGroup = '$imagePath/img_group.svg';
@@ -67,14 +65,12 @@ class ImageConstant {
 
   static String imgLightBulb = '$imagePath/img_light_bulb.svg';
 
-  // My Bookmarks images
   static String imgMenuWhiteA700 = '$imagePath/img_menu_white_a700.svg';
 
   static String imgGrid = '$imagePath/img_grid.svg';
 
   static String imgRectangle5 = '$imagePath/img_rectangle_5.png';
 
-  // Search Page - Tab Container images
   static String imgNavSearchPrimary = '$imagePath/img_nav_search_primary.svg';
 
   // Search Type images
