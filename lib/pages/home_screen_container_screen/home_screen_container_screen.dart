@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:sport_events/pages/add_event_screen/add_event_screen.dart';
 
 import '../../components/custom_bottom_bar.dart';
 import '../../core/utils/size_utils.dart';
@@ -35,7 +36,6 @@ class HomeContainerScreen extends StatelessWidget {
     });
   }
 
-  ///Handling route based on bottom click actions
   String getCurrentRoute(BottomBarEnum type) {
     switch (type) {
       case BottomBarEnum.Home:
@@ -44,6 +44,8 @@ class HomeContainerScreen extends StatelessWidget {
         return AppRoutes.events;
       case BottomBarEnum.Profile:
         return AppRoutes.profileScreen;
+        case BottomBarEnum.Add:
+        return AppRoutes.addEvent;
       default:
         return "/";
     }
@@ -58,6 +60,8 @@ class HomeContainerScreen extends StatelessWidget {
         return EventsOngoingPage();
       case AppRoutes.profileScreen:
         return ProfilePage();
+        case AppRoutes.addEvent:
+        return AddEventScreen();
       default:
         return DefaultWidget();
     }

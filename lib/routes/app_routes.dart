@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sport_events/pages/add_event_screen/add_event_screen.dart';
 
 
 import '../pages/home_screen_container_screen/home_screen_container_screen.dart';
@@ -15,6 +16,7 @@ class AppRoutes {
   static const String signUpScreen = '/signup';
   static const String dashboard = '/dashboard';
   static const String events = '/event';
+  static const String addEvent = '/addEvent';
   static const String homeScreen = '/home';
   static const String profileScreen = '/profile';
   static Map<String, WidgetBuilder> routes = {
@@ -24,8 +26,7 @@ class AppRoutes {
     profileScreen: (context) => ProfilePage(),
     homeScreen: (context) => HomeContainerScreen(),
     events: (context) => EventsOngoingPage(),
-    // dashboard: (context) => DashboardPage(),
-    // homeScreen: (context) => HomeContainerScreen(),
-    // profileScreen: (context) => ProfilePage()
+    addEvent: (context) => AddEventScreen(),
+
   };
 }
