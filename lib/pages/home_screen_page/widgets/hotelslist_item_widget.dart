@@ -1,4 +1,4 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
 
@@ -10,115 +10,133 @@ import '../../../theme/custom_button_style.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
 
-// ignore: must_be_immutable
 class HotelslistItemWidget extends StatelessWidget {
-  const HotelslistItemWidget({Key? key})
-      : super(
-          key: key,
-        );
+  final DocumentSnapshot eventData;
+
+  const HotelslistItemWidget({Key? key, required this.eventData})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 400.v,
-      width: 300.h,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          CustomImageView(
-            imagePath: ImageConstant.imgRectangle3,
+    String name = eventData['name'] ?? '';
+    String location = eventData['location'] ?? '';
+    String type = eventData['type'] ?? '';
+    String participant = eventData['participant'] ?? '';
+    String photoUrl = eventData['photoUrl'] ?? '';
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('events').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          // If the data is loaded successfully, build your UI using the data.
+          return SizedBox(
             height: 400.v,
             width: 300.h,
-            radius: BorderRadius.circular(
-              36.h,
-            ),
-            alignment: Alignment.center,
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                CustomElevatedButton(
-                  height: 32.v,
-                  width: 71.h,
-                  text: "4.8",
-                  margin: EdgeInsets.only(right: 23.h),
-                  leftIcon: Container(
-                    margin: EdgeInsets.only(right: 8.h),
-                    child: CustomImageView(
-                      imagePath: ImageConstant.imgStar,
-                      height: 12.adaptSize,
-                      width: 12.adaptSize,
-                    ),
+                CustomImageView(
+                  imagePath: photoUrl,
+                  height: 400.v,
+                  width: 300.h,
+                  fit: BoxFit.cover,
+                  radius: BorderRadius.circular(
+                    36.h,
                   ),
-                  buttonStyle: CustomButtonStyles.fillPrimaryTL16,
-                  buttonTextStyle: CustomTextStyles.titleSmallWhiteA700,
+                  alignment: Alignment.center,
                 ),
-                SizedBox(height: 172.v),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 32.h,
-                    vertical: 21.v,
-                  ),
-                  decoration: AppDecoration.gradient.copyWith(
-                    borderRadius: BorderRadiusStyle.customBorderBL36,
-                  ),
+                Align(
+                  alignment: Alignment.bottomCenter,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(height: 16.v),
-                      Text(
-                        "Emeralda De Hotel",
-                        style: theme.textTheme.headlineSmall,
+                      CustomElevatedButton(
+                        height: 32.v,
+                        width: 71.h,
+                        text: "4.8",
+                        margin: EdgeInsets.only(right: 23.h),
+                        leftIcon: Container(
+                          margin: EdgeInsets.only(right: 8.h),
+                          child: CustomImageView(
+                            imagePath: ImageConstant.imgStar,
+                            height: 12.adaptSize,
+                            width: 12.adaptSize,
+                          ),
+                        ),
+                        buttonStyle: CustomButtonStyles.fillPrimaryTL16,
+                        buttonTextStyle: CustomTextStyles.titleSmallWhiteA700,
                       ),
-                      SizedBox(height: 15.v),
-                      Text(
-                        "Paris, France",
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                      SizedBox(height: 10.v),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 2.v),
-                            child: Text(
-                              "29",
+                      SizedBox(height: 172.v),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 32.h,
+                          vertical: 21.v,
+                        ),
+                        decoration: AppDecoration.gradient.copyWith(
+                          borderRadius: BorderRadiusStyle.customBorderBL36,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            SizedBox(height: 16.v),
+                            Text(
+                              "Emeralda De Hotel",
                               style: theme.textTheme.headlineSmall,
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: 4.h,
-                              top: 9.v,
-                              bottom: 5.v,
+                            SizedBox(height: 15.v),
+                            Text(
+                              "Paris, France",
+                              style: theme.textTheme.bodyLarge,
                             ),
-                            child: Text(
-                              "/ per night",
-                              style: CustomTextStyles.bodyMediumWhiteA700,
+                            SizedBox(height: 10.v),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 2.v),
+                                  child: Text(
+                                    "29",
+                                    style: theme.textTheme.headlineSmall,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    left: 4.h,
+                                    top: 9.v,
+                                    bottom: 5.v,
+                                  ),
+                                  child: Text(
+                                    "/ per night",
+                                    style: CustomTextStyles.bodyMediumWhiteA700,
+                                  ),
+                                ),
+                                Spacer(),
+                                CustomImageView(
+                                  imagePath: ImageConstant.imgBookmark,
+                                  height: 28.adaptSize,
+                                  width: 28.adaptSize,
+                                  margin: EdgeInsets.only(bottom: 3.v),
+                                ),
+                              ],
                             ),
-                          ),
-                          Spacer(),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgBookmark,
-                            height: 28.adaptSize,
-                            width: 28.adaptSize,
-                            margin: EdgeInsets.only(bottom: 3.v),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 }

@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
 import 'package:sport_events/pages/home_screen_page/widgets/hotelslist_item_widget.dart';
-import 'package:sport_events/pages/home_screen_page/widgets/martinezcannes_item_widget.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
 
@@ -38,6 +37,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
   TextEditingController eventRuleController = TextEditingController();
   TextEditingController eventParticipantsController = TextEditingController();
   TextEditingController photoUrlController = TextEditingController();
+  late final DocumentSnapshot eventData;
 
 
   bool get wantKeepAlive => true;
@@ -91,13 +91,13 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
       // Add any specific error handling here
     }
   }
-  void _deleteDemande(QueryDocumentSnapshot event) async {
+  void _deleteevent(QueryDocumentSnapshot event) async {
     await _firestore.collection('events').doc(event.id).delete();
   }
 
 
 
-  void _showAddDemandeModal(BuildContext context) {
+  void _showAddeventModal(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -264,7 +264,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                 return CircularProgressIndicator(); // Loading indicator
               }
 
-              List<QueryDocumentSnapshot> demandes = snapshot.data!.docs;
+              List<QueryDocumentSnapshot> events = snapshot.data!.docs;
 
               return ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
@@ -272,9 +272,9 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                 separatorBuilder: (context, index) {
                   return SizedBox(height: 24.v);
                 },
-                itemCount: demandes.length,
+                itemCount: events.length,
                 itemBuilder: (context, index) {
-                  return _buildDemandeItem(context, demandes[index]);
+                  return _buildeventItem(context, events[index]);
                 },
               );
             },
@@ -286,14 +286,14 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
 
   }
 
-  Widget _buildDemandeItem(BuildContext context, QueryDocumentSnapshot demande) {
-    String name = demande['name'] ?? '';
-    String date = demande['date'] ?? '';
-    String location = demande['location'] ?? '';
-    String type = demande['type'] ?? '';
-    String rule = demande['rule'] ?? '';
-    String participant = demande['participant'] ?? '';
-    String photoUrl = demande['photoUrl'] ?? '';
+  Widget _buildeventItem(BuildContext context, QueryDocumentSnapshot event) {
+    String name = event['name'] ?? '';
+    String date = event['date'] ?? '';
+    String location = event['location'] ?? '';
+    String type = event['type'] ?? '';
+    String rule = event['rule'] ?? '';
+    String participant = event['participant'] ?? '';
+    String photoUrl = event['photoUrl'] ?? '';
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.v),
@@ -307,6 +307,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
             imagePath:photoUrl,
             height: 100.adaptSize,
             width: 100.adaptSize,
+            fit: BoxFit.cover,
+
             radius: BorderRadius.circular(
               16.h,
             ),
@@ -377,7 +379,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                       color: Colors.teal,
                     ),
                     onPressed: () {
-                      _deleteDemande(demande);
+                      _deleteevent(event);
                     },
                   ),
                 ),
@@ -438,7 +440,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
         ),
         floatingActionButton: FloatingActionButton(
         onPressed: () {
-      _showAddDemandeModal(context);
+      _showAddeventModal(context);
     },
     child: Icon(Icons.add),
     ),
@@ -448,16 +450,42 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
   /// Section Widget
   Widget _buildHotelsList(BuildContext context) {
     return SizedBox(
-        height: 400.v,
-        child: ListView.separated(
+      height: 400.v,
+      child: FutureBuilder<List<DocumentSnapshot>>(
+        future: fetchDataFromFirebase(), // Replace with your function to fetch data
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
+
+          List<DocumentSnapshot> eventDataList = snapshot.data ?? [];
+
+          return ListView.separated(
             scrollDirection: Axis.horizontal,
             separatorBuilder: (context, index) {
               return SizedBox(width: 24.h);
             },
-            itemCount: 2,
+            itemCount: eventDataList.length,
             itemBuilder: (context, index) {
-              return HotelslistItemWidget();
-            }));
+              DocumentSnapshot eventData = eventDataList[index];
+              return HotelslistItemWidget(eventData: eventData);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+// Replace this function with your actual function to fetch data from Firebase
+  Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {
+    // Implement your logic to fetch data from Firebase here
+    // For example:
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('events').get();
+    return querySnapshot.docs;
   }
 
   /// Section Widget
