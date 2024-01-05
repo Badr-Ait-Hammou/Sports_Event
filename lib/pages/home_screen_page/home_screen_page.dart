@@ -26,12 +26,9 @@ class HomeScreenPage extends StatefulWidget {
   HomeScreenPageState createState() => HomeScreenPageState();
 }
 
-class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveClientMixin<HomeScreenPage> {
-
-
+class HomeScreenPageState extends State<HomeScreenPage>
+    with AutomaticKeepAliveClientMixin<HomeScreenPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-
 
   TextEditingController eventNameController = TextEditingController();
   TextEditingController eventDateController = TextEditingController();
@@ -50,7 +47,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     try {
       final ImagePicker imagePicker = ImagePicker();
       final XFile? image =
-      await imagePicker.pickImage(source: ImageSource.gallery);
+          await imagePicker.pickImage(source: ImageSource.gallery);
       if (image != null) {
         final imageExtension = path.extension(image.path).toLowerCase();
 
@@ -67,7 +64,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
 
           Fluttertoast.showToast(
               msg:
-              "Échec de la mise à jour de l'image, essayez avec une autre image",
+                  "Échec de la mise à jour de l'image, essayez avec une autre image",
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.CENTER,
               timeInSecForIosWeb: 1,
@@ -91,11 +88,10 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
       print("Error selecting image: $e");
     }
   }
+
   void _deleteevent(QueryDocumentSnapshot event) async {
     await _firestore.collection('events').doc(event.id).delete();
   }
-
-
 
   void _showAddeventModal(BuildContext context) {
     showModalBottomSheet(
@@ -160,9 +156,9 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                   width: 50,
                   child: imageUrl.isNotEmpty
                       ? Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                  )
+                          imageUrl,
+                          fit: BoxFit.cover,
+                        )
                       : Container(),
                 ),
                 IconButton(
@@ -180,11 +176,12 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                           File imageFile = File(imageUrl!);
                           String imageName = path.basename(imageFile.path);
                           Reference storageReference =
-                          storageRef.child('images/$imageName');
-                          UploadTask uploadTask = storageReference.putFile(imageFile);
+                              storageRef.child('images/$imageName');
+                          UploadTask uploadTask =
+                              storageReference.putFile(imageFile);
                           await uploadTask.whenComplete(() async {
                             String downloadUrl =
-                            await storageReference.getDownloadURL();
+                                await storageReference.getDownloadURL();
                             print("Download URL: $downloadUrl");
 
                             await _firestore.collection('events').add({
@@ -217,7 +214,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                                 fontSize: 16.0);
                           });
                         } catch (e) {
-                          print("Error uploading image to Firebase Storage: $e");
+                          print(
+                              "Error uploading image to Firebase Storage: $e");
                           Fluttertoast.showToast(
                               msg: "Error uploading image to Firebase Storage",
                               toastLength: Toast.LENGTH_SHORT,
@@ -239,8 +237,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                       }
                     },
                     text: "Create Event",
-                    margin: EdgeInsets.only(left: 24.h, right: 24.h, bottom: 49.v)
-                )
+                    margin:
+                        EdgeInsets.only(left: 24.h, right: 24.h, bottom: 49.v))
               ],
             ),
           ),
@@ -278,8 +276,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
         ),
       ],
     );
-
-
   }
 
   Widget _buildeventItem(BuildContext context, QueryDocumentSnapshot event) {
@@ -300,11 +296,10 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           CustomImageView(
-            imagePath:photoUrl,
+            imagePath: photoUrl,
             height: 100.adaptSize,
             width: 100.adaptSize,
             fit: BoxFit.cover,
-
             radius: BorderRadius.circular(
               16.h,
             ),
@@ -388,53 +383,47 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-        appBar: CustomAppBar(
-            height: 50.v,
-            leadingWidth: 56.h,
-            leading: AppbarLeadingImage(
-                imagePath: ImageConstant.logo,
-                margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
-            title:
-                AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
-            actions: [
-              AppbarTrailingImage(
-                  imagePath: ImageConstant.imgIcons,
-                  margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
-                  onTap: () {
-                  }),
-              AppbarTrailingImage(
-                  imagePath: ImageConstant.imgClock,
-                  margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
-            ]),
-        body: SizedBox(
-            width: mediaQueryData.size.width,
-            child: SingleChildScrollView(
-                child: Column(children: [
-              SizedBox(height: 30.v),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 24.h),
-                      child: Column(children: [
-                        _buildHotelsList(context),
-                        SizedBox(height: 34.v),
-                        _buildRecentlyBookedList(context)
-                      ])))
-                ]
-                )
-            )
-        ),
-        floatingActionButton: FloatingActionButton(
+      appBar: CustomAppBar(
+          height: 50.v,
+          leadingWidth: 56.h,
+          leading: AppbarLeadingImage(
+              imagePath: ImageConstant.logo,
+              margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
+          title: AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
+          actions: [
+            AppbarTrailingImage(
+                imagePath: ImageConstant.imgIcons,
+                margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
+                onTap: () {}),
+            AppbarTrailingImage(
+                imagePath: ImageConstant.imgClock,
+                margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
+          ]),
+      body: SizedBox(
+          width: mediaQueryData.size.width,
+          child: SingleChildScrollView(
+              child: Column(children: [
+            SizedBox(height: 30.v),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 24.h),
+                    child: Column(children: [
+                      _buildHotelsList(context),
+                      SizedBox(height: 34.v),
+                      _buildRecentlyBookedList(context)
+                    ])))
+          ]))),
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
-      _showAddeventModal(context);
-    },
-    child: Icon(Icons.add),
-    ),
+          _showAddeventModal(context);
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 
@@ -471,12 +460,8 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
   }
 
   Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('events').get();
+    QuerySnapshot querySnapshot =
+        await FirebaseFirestore.instance.collection('events').get();
     return querySnapshot.docs;
   }
-
-
-
 }
-
-

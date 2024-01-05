@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
-
 
 import '../components/custom_image_view.dart';
 import '../core/utils/image_constant.dart';
@@ -29,34 +29,35 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   Future<void> init() async {
-    Navigator.pushNamed(context, AppRoutes.loginScreen);
+    if (FirebaseAuth.instance.currentUser != null) {
+      Navigator.pushNamed(context, AppRoutes.homeScreen);
+    } else {
+      Navigator.pushNamed(context, AppRoutes.loginScreen);
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     theme = Theme.of(context);
 
-    return  Scaffold(
-        body: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            children: [
-              CustomImageView(
-                imagePath: ImageConstant.splashimg1,
-                height: 420.v,
-                width: 428.h,
-              ),
-              SizedBox(height: 76.v),
-              _buildWelcomeSection(context),
-              SizedBox(height: 5.v),
-            ],
-          ),
+    return Scaffold(
+      body: SizedBox(
+        width: double.maxFinite,
+        child: Column(
+          children: [
+            CustomImageView(
+              imagePath: ImageConstant.splashimg1,
+              height: 420.v,
+              width: 428.h,
+            ),
+            SizedBox(height: 76.v),
+            _buildWelcomeSection(context),
+            SizedBox(height: 5.v),
+          ],
         ),
-      );
-
+      ),
+    );
   }
 
   /// Section Widget

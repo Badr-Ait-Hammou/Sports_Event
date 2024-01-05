@@ -8,7 +8,7 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp( MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
-      title: 'events',
+      title: 'Emsi Sport Events',
       debugShowCheckedModeBanner: false,
       initialRoute: AppRoutes.splashScreen,
       routes: AppRoutes.routes,

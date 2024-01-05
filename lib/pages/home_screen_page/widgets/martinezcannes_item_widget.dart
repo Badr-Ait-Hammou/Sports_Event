@@ -6,7 +6,6 @@ import '../../../core/utils/image_constant.dart';
 import '../../../theme/app_decoration.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
-import 'eventform.dart';
 
 class MartinezcannesItemWidget extends StatelessWidget {
   const MartinezcannesItemWidget({Key? key}) : super(key: key);
@@ -110,13 +109,7 @@ class MartinezcannesItemWidget extends StatelessWidget {
           bottom: 16.0, // Adjust the position as needed
           right: 16.0, // Adjust the position as needed
           child: FloatingActionButton(
-            onPressed: () {
-              // Navigate to the page where you create a new event
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EventCreationForm()),
-              );
-            },
+            onPressed: () {},
             child: Icon(Icons.add),
           ),
         ),
@@ -124,43 +117,3 @@ class MartinezcannesItemWidget extends StatelessWidget {
     );
   }
 }
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Events'),
-//       ),
-//       body: StreamBuilder<QuerySnapshot>(
-//         stream: FirebaseFirestore.instance.collection('events').snapshots(),
-//         builder: (context, snapshot) {
-//           if (!snapshot.hasData) {
-//             return Center(child: CircularProgressIndicator());
-//           }
-//
-//           var events = snapshot.data!.docs;
-//
-//           return ListView.builder(
-//             itemCount: events.length,
-//             itemBuilder: (context, index) {
-//               var event = events[index].data() as Map<String, dynamic>;
-//               return EventListItem(event: event);
-//             },
-//           );
-//         },
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           // Navigate to the page where you create a new event
-//           Navigator.push(
-//             context,
-//             MaterialPageRoute(builder: (context) => EventCreationForm()),
-//           );
-//         },
-//         child: Icon(Icons.add),
-//       ),
-//     );
-//   }
-// }
-//

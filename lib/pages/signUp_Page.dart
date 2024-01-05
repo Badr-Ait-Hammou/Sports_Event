@@ -12,7 +12,6 @@ import '../theme/app_decoration.dart';
 import '../theme/custom_text_style.dart';
 import '../theme/theme_helper.dart';
 
-
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
 
@@ -21,7 +20,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-
   TextEditingController emailController = TextEditingController();
 
   TextEditingController passwordController = TextEditingController();
@@ -29,19 +27,21 @@ class _SignUpPageState extends State<SignUpPage> {
   TextEditingController fnameController = TextEditingController();
 
   bool rememberme = false;
-
+  bool isVisible = true;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 
   onTapSignUp(BuildContext context) async {
     try {
       UserCredential userCredential =
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
         'firstName': fnameController.text,
         'lastName': lnameController.text,
         'email': emailController.text,
@@ -53,22 +53,20 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return  Scaffold(
+    return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Form(
             key: _formKey,
             child: Container(
                 width: double.maxFinite,
-                padding:
-                EdgeInsets.symmetric(horizontal: 24.h, vertical: 11.v),
+                padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 11.v),
                 child: Column(children: [
                   SizedBox(height: 70.v),
-
-                  CustomImageView(imagePath: ImageConstant.logo,
+                  CustomImageView(
+                      imagePath: ImageConstant.logo,
                       height: 120.adaptSize,
                       width: 120.adaptSize,
                       alignment: Alignment.center,
@@ -91,20 +89,18 @@ class _SignUpPageState extends State<SignUpPage> {
                   SizedBox(height: 10.v),
                   _buildSocial(context),
                   SizedBox(height: 20.v),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Already have an account?",
-                            style: CustomTextStyles.bodyMediumGray50_1),
-                        GestureDetector(
-                            onTap: () {
-                              onTapTxtSignIn(context);
-                            },
-                            child: Padding(
-                                padding: EdgeInsets.only(left: 8.h),
-                                child: Text("Sign in",
-                                    style: theme.textTheme.titleSmall)))
-                      ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text("Already have an account?",
+                        style: CustomTextStyles.bodyMediumGray50_1),
+                    GestureDetector(
+                        onTap: () {
+                          onTapTxtSignIn(context);
+                        },
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 8.h),
+                            child: Text("Sign in",
+                                style: theme.textTheme.titleSmall)))
+                  ]),
                   SizedBox(height: 5.v)
                 ]))));
   }
@@ -124,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 20.adaptSize)),
           prefixConstraints: BoxConstraints(maxHeight: 60.v),
           contentPadding:
-          EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
+              EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
       SizedBox(height: 20.v),
       CustomTextFormField(
           controller: lnameController,
@@ -138,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 20.adaptSize)),
           prefixConstraints: BoxConstraints(maxHeight: 60.v),
           contentPadding:
-          EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
+              EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
       SizedBox(height: 20.v),
       CustomTextFormField(
           controller: emailController,
@@ -152,7 +148,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: 20.adaptSize)),
           prefixConstraints: BoxConstraints(maxHeight: 60.v),
           contentPadding:
-          EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
+              EdgeInsets.only(top: 21.v, right: 30.h, bottom: 21.v)),
       SizedBox(height: 20.v),
       CustomTextFormField(
           controller: passwordController,
@@ -166,17 +162,21 @@ class _SignUpPageState extends State<SignUpPage> {
                   height: 20.adaptSize,
                   width: 20.adaptSize)),
           prefixConstraints: BoxConstraints(maxHeight: 60.v),
-          suffix: Container(
-              margin: EdgeInsets.fromLTRB(30.h, 20.v, 20.h, 20.v),
-              child: CustomImageView(
-                  imagePath: ImageConstant.imgDashboard,
-                  height: 20.adaptSize,
-                  width: 20.adaptSize)),
+          suffix: IconButton(
+            icon: Icon(
+              isVisible ? Icons.visibility : Icons.visibility_off,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              setState(() {
+                isVisible = !isVisible;
+              });
+            },
+          ),
+          obscureText: isVisible,
           suffixConstraints: BoxConstraints(maxHeight: 60.v),
-          obscureText: true,
           contentPadding: EdgeInsets.symmetric(vertical: 21.v)),
       SizedBox(height: 25.v),
-
       SizedBox(height: 30.v),
       CustomElevatedButton(
           text: "Sign Up",
@@ -188,18 +188,23 @@ class _SignUpPageState extends State<SignUpPage> {
 
   /// Section Widget
   Widget _buildOrDivider(BuildContext context) {
-    return Padding(padding: EdgeInsets.symmetric(horizontal: 10.h),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.h),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Padding(padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
+              Padding(
+                  padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
                   child: SizedBox(width: 96.h, child: Divider())),
               Text("or continue with",
                   style: CustomTextStyles.titleMediumGray50),
-              Padding(padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
+              Padding(
+                  padding: EdgeInsets.only(top: 11.v, bottom: 9.v),
                   child: SizedBox(width: 96.h, child: Divider()))
             ]));
   }
+
   /// Section Widget
   Widget _buildSocial(BuildContext context) {
     return Padding(
@@ -248,11 +253,8 @@ class _SignUpPageState extends State<SignUpPage> {
     Navigator.pop(context);
   }
 
-
   /// Navigates to the fillProfileScreen when the action is triggered.
   onTapTxtSignIn(BuildContext context) {
     Navigator.pushNamed(context, AppRoutes.loginScreen);
   }
 }
-
-
