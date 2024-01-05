@@ -21,20 +21,12 @@ class HotelslistItemWidget extends StatelessWidget {
     String name = eventData['name'] ?? '';
     String location = eventData['location'] ?? '';
     String type = eventData['type'] ?? '';
+    String rule = eventData['rule'] ?? '';
     String participant = eventData['participant'] ?? '';
     String photoUrl = eventData['photoUrl'] ?? '';
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('events').snapshots(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          }
-
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          }
-
-          // If the data is loaded successfully, build your UI using the data.
           return SizedBox(
             height: 400.v,
             width: 300.h,
@@ -46,6 +38,7 @@ class HotelslistItemWidget extends StatelessWidget {
                   height: 400.v,
                   width: 300.h,
                   fit: BoxFit.cover,
+
                   radius: BorderRadius.circular(
                     36.h,
                   ),
@@ -60,7 +53,7 @@ class HotelslistItemWidget extends StatelessWidget {
                       CustomElevatedButton(
                         height: 32.v,
                         width: 71.h,
-                        text: "4.8",
+                        text: type,
                         margin: EdgeInsets.only(right: 23.h),
                         leftIcon: Container(
                           margin: EdgeInsets.only(right: 8.h),
@@ -89,12 +82,12 @@ class HotelslistItemWidget extends StatelessWidget {
                           children: [
                             SizedBox(height: 16.v),
                             Text(
-                              "Emeralda De Hotel",
+                              name,
                               style: theme.textTheme.headlineSmall,
                             ),
                             SizedBox(height: 15.v),
                             Text(
-                              "Paris, France",
+                              location,
                               style: theme.textTheme.bodyLarge,
                             ),
                             SizedBox(height: 10.v),
@@ -104,7 +97,7 @@ class HotelslistItemWidget extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.only(top: 2.v),
                                   child: Text(
-                                    "29",
+                                    "$participant Participants",
                                     style: theme.textTheme.headlineSmall,
                                   ),
                                 ),
@@ -115,7 +108,7 @@ class HotelslistItemWidget extends StatelessWidget {
                                     bottom: 5.v,
                                   ),
                                   child: Text(
-                                    "/ per night",
+                                    rule,
                                     style: CustomTextStyles.bodyMediumWhiteA700,
                                   ),
                                 ),

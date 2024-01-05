@@ -8,7 +8,6 @@ import 'package:sport_events/core/utils/size_utils.dart';
 import 'package:sport_events/pages/home_screen_page/widgets/hotelslist_item_widget.dart';
 import 'package:path/path.dart' as path;
 import 'dart:io';
-
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -29,7 +28,11 @@ class HomeScreenPage extends StatefulWidget {
 
 class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveClientMixin<HomeScreenPage> {
 
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
+
   TextEditingController eventNameController = TextEditingController();
   TextEditingController eventDateController = TextEditingController();
   TextEditingController eventLocationController = TextEditingController();
@@ -38,8 +41,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
   TextEditingController eventParticipantsController = TextEditingController();
   TextEditingController photoUrlController = TextEditingController();
   late final DocumentSnapshot eventData;
-
-
   bool get wantKeepAlive => true;
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
   String imageUrl = '';
@@ -88,7 +89,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
       }
     } catch (e) {
       print("Error selecting image: $e");
-      // Add any specific error handling here
     }
   }
   void _deleteevent(QueryDocumentSnapshot event) async {
@@ -181,10 +181,7 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                           String imageName = path.basename(imageFile.path);
                           Reference storageReference =
                           storageRef.child('images/$imageName');
-
-
-                          UploadTask uploadTask =
-                          storageReference.putFile(imageFile);
+                          UploadTask uploadTask = storageReference.putFile(imageFile);
                           await uploadTask.whenComplete(() async {
                             String downloadUrl =
                             await storageReference.getDownloadURL();
@@ -202,6 +199,9 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
 
                             eventNameController.clear();
                             eventDateController.clear();
+                            eventTypeController.clear();
+                            eventLocationController.clear();
+                            eventRuleController.clear();
                             imageUrl = '';
                             img = false;
 
@@ -249,8 +249,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-
-
   Widget _buildRecentlyBookedList(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -261,11 +259,9 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
             stream: _firestore.collection('events').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return CircularProgressIndicator(); // Loading indicator
+                return CircularProgressIndicator();
               }
-
               List<QueryDocumentSnapshot> events = snapshot.data!.docs;
-
               return ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -384,11 +380,6 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
                   ),
                 ),
                 SizedBox(height: 16.v),
-                // CustomImageView(
-                //   imagePath: ImageConstant.imgBookmarkPrimary,
-                //   height: 24.adaptSize,
-                //   width: 24.adaptSize,
-                // ),
               ],
             ),
           ),
@@ -447,12 +438,11 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-  /// Section Widget
   Widget _buildHotelsList(BuildContext context) {
     return SizedBox(
       height: 400.v,
       child: FutureBuilder<List<DocumentSnapshot>>(
-        future: fetchDataFromFirebase(), // Replace with your function to fetch data
+        future: fetchDataFromFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -480,49 +470,13 @@ class HomeScreenPageState extends State<HomeScreenPage> with AutomaticKeepAliveC
     );
   }
 
-// Replace this function with your actual function to fetch data from Firebase
   Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {
-    // Implement your logic to fetch data from Firebase here
-    // For example:
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('events').get();
     return querySnapshot.docs;
   }
 
-  /// Section Widget
-  // Widget _buildRecentlyBookedList(BuildContext context) {
-  //   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-  //     Padding(
-  //         padding: EdgeInsets.only(right: 24.h),
-  //         child:
-  //             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-  //           Text("Recently Booked", style: theme.textTheme.titleMedium),
-  //           GestureDetector(
-  //               onTap: () {
-  //                 onTapTxtSeeAll(context);
-  //               },
-  //               child: Text("See All",
-  //                   style: CustomTextStyles.titleMediumPrimary16))
-  //         ])),
-  //     SizedBox(height: 16.v),
-  //     Padding(
-  //         padding: EdgeInsets.only(right: 24.h),
-  //         child: ListView.separated(
-  //             physics: NeverScrollableScrollPhysics(),
-  //             shrinkWrap: true,
-  //             separatorBuilder: (context, index) {
-  //               return SizedBox(height: 24.v);
-  //             },
-  //             itemCount: 5,
-  //             itemBuilder: (context, index) {
-  //               return MartinezcannesItemWidget();
-  //             }))
-  //   ]);
-  // }
 
-  /// Navigates to the recentlyBookedScreen when the action is triggered.
-  onTapTxtSeeAll(BuildContext context) {
-    // Navigator.pushNamed(context, AppRoutes.recentlyBookedScreen);
-  }
+
 }
 
 
