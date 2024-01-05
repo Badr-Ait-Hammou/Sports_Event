@@ -6,10 +6,8 @@ class EventListItem extends StatelessWidget {
   final Map<String, dynamic> event;
 
   EventListItem({required this.event});
-
   @override
   Widget build(BuildContext context) {
-    // Convert the map to an Event object
     Event eventObject = Event(
       name: event['name'],
       date: event['date'],
