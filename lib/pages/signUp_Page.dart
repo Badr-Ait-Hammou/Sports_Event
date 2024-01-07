@@ -45,6 +45,7 @@ class _SignUpPageState extends State<SignUpPage> {
         'firstName': fnameController.text,
         'lastName': lnameController.text,
         'email': emailController.text,
+        'events': []
       });
 
       Navigator.pushNamed(context, AppRoutes.homeScreen);

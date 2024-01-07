@@ -1,20 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
+import 'package:sport_events/core/model/event.model.dart';
+import 'package:sport_events/core/service/event.service.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
+import 'package:sport_events/pages/add_event_screen/add_event_screen.dart';
 import 'package:sport_events/pages/home_screen_page/widgets/hotelslist_item_widget.dart';
-import 'package:path/path.dart' as path;
-import 'dart:io';
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
 import '../../components/app_bar/appbar_title.dart';
 import '../../components/app_bar/appbar_trailing_image.dart';
 import '../../components/app_bar/custom_app_bar.dart';
-import '../../components/custom_elevated_button.dart';
 import '../../components/custom_image_view.dart';
 import '../../core/utils/image_constant.dart';
 import '../../theme/app_decoration.dart';
@@ -29,222 +26,13 @@ class HomeScreenPage extends StatefulWidget {
 class HomeScreenPageState extends State<HomeScreenPage>
     with AutomaticKeepAliveClientMixin<HomeScreenPage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  TextEditingController eventNameController = TextEditingController();
-  TextEditingController eventDateController = TextEditingController();
-  TextEditingController eventLocationController = TextEditingController();
-  TextEditingController eventTypeController = TextEditingController();
-  TextEditingController eventRuleController = TextEditingController();
-  TextEditingController eventParticipantsController = TextEditingController();
-  TextEditingController photoUrlController = TextEditingController();
+  final FirebaseAuth auth = FirebaseAuth.instance;
   late final DocumentSnapshot eventData;
   bool get wantKeepAlive => true;
-  final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
-  String imageUrl = '';
-  bool img = false;
 
-  Future<void> ajouteImage() async {
-    try {
-      final ImagePicker imagePicker = ImagePicker();
-      final XFile? image =
-          await imagePicker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        final imageExtension = path.extension(image.path).toLowerCase();
-
-        if (imageExtension == '.png' ||
-            imageExtension == '.jpeg' ||
-            imageExtension == '.jpg') {
-          setState(() {
-            imageUrl = image.path;
-            img = true;
-          });
-        } else {
-          print(
-              "Échec de la mise à jour de l'image, essayez avec une autre image");
-
-          Fluttertoast.showToast(
-              msg:
-                  "Échec de la mise à jour de l'image, essayez avec une autre image",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0);
-        }
-      } else {
-        print("Le fichier n'est pas une image");
-
-        Fluttertoast.showToast(
-            msg: "Le fichier n'est pas une image",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-    } catch (e) {
-      print("Error selecting image: $e");
-    }
-  }
-
-  void _deleteevent(QueryDocumentSnapshot event) async {
-    await _firestore.collection('events').doc(event.id).delete();
-  }
-
-  void _showAddeventModal(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext ctx) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.only(
-              top: 20,
-              left: 20,
-              right: 20,
-              bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: eventNameController,
-                  decoration: const InputDecoration(labelText: 'Event Name'),
-                ),
-                TextField(
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2101),
-                    );
-                    if (pickedDate != null) {
-                      eventDateController.text = _dateFormat.format(pickedDate);
-                    }
-                  },
-                  controller: eventDateController,
-                  decoration: const InputDecoration(labelText: 'Event Date'),
-                ),
-                TextFormField(
-                  controller: eventLocationController,
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(labelText: 'City'),
-                ),
-                TextFormField(
-                  controller: eventTypeController,
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(labelText: 'Type'),
-                ),
-                TextFormField(
-                  controller: eventParticipantsController,
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(labelText: 'participants'),
-                  keyboardType: TextInputType.number,
-                ),
-                TextFormField(
-                  controller: eventRuleController,
-                  style: TextStyle(color: Colors.black),
-                  decoration: InputDecoration(labelText: 'rule'),
-                ),
-                Container(
-                  height: 50,
-                  width: 50,
-                  child: imageUrl.isNotEmpty
-                      ? Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        )
-                      : Container(),
-                ),
-                IconButton(
-                  onPressed: ajouteImage,
-                  icon: Icon(Icons.camera_alt),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomElevatedButton(
-                    onPressed: () async {
-                      if (imageUrl.isNotEmpty) {
-                        try {
-                          final storageRef = FirebaseStorage.instance.ref();
-                          File imageFile = File(imageUrl!);
-                          String imageName = path.basename(imageFile.path);
-                          Reference storageReference =
-                              storageRef.child('images/$imageName');
-                          UploadTask uploadTask =
-                              storageReference.putFile(imageFile);
-                          await uploadTask.whenComplete(() async {
-                            String downloadUrl =
-                                await storageReference.getDownloadURL();
-                            print("Download URL: $downloadUrl");
-
-                            await _firestore.collection('events').add({
-                              'date': eventDateController.text,
-                              'name': eventNameController.text,
-                              'type': eventTypeController.text,
-                              'location': eventLocationController.text,
-                              'participant': eventParticipantsController.text,
-                              'rule': eventRuleController.text,
-                              'photoUrl': downloadUrl,
-                            });
-
-                            eventNameController.clear();
-                            eventDateController.clear();
-                            eventTypeController.clear();
-                            eventLocationController.clear();
-                            eventRuleController.clear();
-                            imageUrl = '';
-                            img = false;
-
-                            Navigator.of(context).pop();
-
-                            Fluttertoast.showToast(
-                                msg: "Event added successfully",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.greenAccent,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
-                          });
-                        } catch (e) {
-                          print(
-                              "Error uploading image to Firebase Storage: $e");
-                          Fluttertoast.showToast(
-                              msg: "Error uploading image to Firebase Storage",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                        }
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Please select an image for the event",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      }
-                    },
-                    text: "Create Event",
-                    margin:
-                        EdgeInsets.only(left: 24.h, right: 24.h, bottom: 49.v))
-              ],
-            ),
-          ),
-        );
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   Widget _buildRecentlyBookedList(BuildContext context) {
@@ -259,16 +47,20 @@ class HomeScreenPageState extends State<HomeScreenPage>
               if (!snapshot.hasData) {
                 return CircularProgressIndicator();
               }
+
               List<QueryDocumentSnapshot> events = snapshot.data!.docs;
+              List<Event> eventList =
+                  events.map((e) => Event.fromFirestore(e)).toList();
+
               return ListView.separated(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 separatorBuilder: (context, index) {
                   return SizedBox(height: 24.v);
                 },
-                itemCount: events.length,
+                itemCount: eventList.length,
                 itemBuilder: (context, index) {
-                  return _buildeventItem(context, events[index]);
+                  return _buildeventItem(context, eventList[index]);
                 },
               );
             },
@@ -278,14 +70,16 @@ class HomeScreenPageState extends State<HomeScreenPage>
     );
   }
 
-  Widget _buildeventItem(BuildContext context, QueryDocumentSnapshot event) {
-    String name = event['name'] ?? '';
-    String date = event['date'] ?? '';
-    String location = event['location'] ?? '';
-    String type = event['type'] ?? '';
-    String rule = event['rule'] ?? '';
-    String participant = event['participant'] ?? '';
-    String photoUrl = event['photoUrl'] ?? '';
+  Widget _buildeventItem(BuildContext context, Event event) {
+    User? user = auth.currentUser;
+    String currentUserId = user?.uid ?? '';
+    String name = event.name;
+    String date = event.date;
+    String location = event.location;
+    String type = event.type;
+    String rule = event.rule;
+    String participant = event.participant;
+    String photoUrl = event.photoUrl;
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.v),
@@ -363,18 +157,29 @@ class HomeScreenPageState extends State<HomeScreenPage>
                   style: CustomTextStyles.headlineSmallPrimary,
                 ),
                 SizedBox(height: 2.v),
-                Center(
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.teal,
-                    ),
-                    onPressed: () {
-                      _deleteevent(event);
-                    },
-                  ),
-                ),
-                SizedBox(height: 16.v),
+                currentUserId == event.createdBy
+                    ? Center(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: Colors.teal,
+                          ),
+                          onPressed: () async {
+                            await EventService().deleteEvent(event.id);
+                          },
+                        ),
+                      )
+                    : Center(
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.add_alert_outlined,
+                            color: Colors.teal,
+                          ),
+                          onPressed: () async {
+                            await EventService().joinEvent(event.id);
+                          },
+                        ),
+                      ),
               ],
             ),
           ),
@@ -385,46 +190,60 @@ class HomeScreenPageState extends State<HomeScreenPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-      appBar: CustomAppBar(
-          height: 50.v,
-          leadingWidth: 56.h,
-          leading: AppbarLeadingImage(
-              imagePath: ImageConstant.logo,
-              margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
-          title: AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
-          actions: [
-            AppbarTrailingImage(
-                imagePath: ImageConstant.imgIcons,
-                margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
-                onTap: () {}),
-            AppbarTrailingImage(
-                imagePath: ImageConstant.imgClock,
-                margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
-          ]),
-      body: SizedBox(
-          width: mediaQueryData.size.width,
-          child: SingleChildScrollView(
-              child: Column(children: [
-            SizedBox(height: 30.v),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                    padding: EdgeInsets.only(left: 24.h),
-                    child: Column(children: [
-                      _buildHotelsList(context),
-                      SizedBox(height: 34.v),
-                      _buildRecentlyBookedList(context)
-                    ])))
-          ]))),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddeventModal(context);
-        },
-        child: Icon(Icons.add),
-      ),
-    );
+        appBar: CustomAppBar(
+            height: 50.v,
+            leadingWidth: 56.h,
+            leading: AppbarLeadingImage(
+                imagePath: ImageConstant.logo,
+                margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
+            title:
+                AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
+            actions: [
+              AppbarTrailingImage(
+                  imagePath: ImageConstant.imgIcons,
+                  margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
+                  onTap: () {}),
+              AppbarTrailingImage(
+                  imagePath: ImageConstant.imgClock,
+                  margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
+            ]),
+        body: SizedBox(
+            width: mediaQueryData.size.width,
+            child: SingleChildScrollView(
+                child: Column(children: [
+              SizedBox(height: 30.v),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                      padding: EdgeInsets.only(left: 24.h),
+                      child: Column(children: [
+                        _buildHotelsList(context),
+                        SizedBox(height: 34.v),
+                        _buildRecentlyBookedList(context)
+                      ])))
+            ]))),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Color.fromARGB(255, 123, 122, 122),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+              ),
+              builder: (context) {
+                return AddEventScreen(
+                  modalHeight: MediaQuery.of(context).size.height * 0.95,
+                );
+              },
+            );
+          },
+          tooltip: 'Add',
+          child: Icon(Icons.add),
+        ));
   }
 
   Widget _buildHotelsList(BuildContext context) {

@@ -6,7 +6,8 @@ class Event {
   String name;
   String type;
   String location;
-  List<String> participants;
+  String participant;
+  List<String> listParticipants;
   String rule;
   String photoUrl;
   String createdBy;
@@ -17,7 +18,8 @@ class Event {
     required this.name,
     required this.type,
     required this.location,
-    required this.participants,
+    required this.participant,
+    required this.listParticipants,
     required this.rule,
     required this.photoUrl,
     required this.createdBy,
@@ -31,7 +33,8 @@ class Event {
       name: data['name'] ?? '',
       type: data['type'] ?? '',
       location: data['location'] ?? '',
-      participants: List<String>.from(data['participants'] ?? []),
+      participant: data['participant'] ?? '',
+      listParticipants: List<String>.from(data['listParticipants'] ?? []),
       rule: data['rule'] ?? '',
       photoUrl: data['photoUrl'] ?? '',
       createdBy: data['createdBy'] ?? '',

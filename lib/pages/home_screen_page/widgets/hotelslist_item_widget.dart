@@ -38,7 +38,6 @@ class HotelslistItemWidget extends StatelessWidget {
                   height: 400.v,
                   width: 300.h,
                   fit: BoxFit.cover,
-
                   radius: BorderRadius.circular(
                     36.h,
                   ),
