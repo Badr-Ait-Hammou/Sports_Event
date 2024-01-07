@@ -5,6 +5,7 @@ import '../theme/custom_text_style.dart';
 import '../theme/theme_helper.dart';
 import 'custom_image_view.dart';
 
+// ignore: must_be_immutable
 class CustomBottomBar extends StatefulWidget {
   CustomBottomBar({this.onChanged});
 
@@ -29,12 +30,6 @@ class CustomBottomBarState extends State<CustomBottomBar> {
       activeIcon: ImageConstant.imgNavBooking,
       title: "Events",
       type: BottomBarEnum.Events,
-    ),
-    BottomMenuModel(
-      icon: ImageConstant.imgMenu,
-      activeIcon: ImageConstant.imgMenu,
-      title: "Add",
-      type: BottomBarEnum.Add,
     ),
     BottomMenuModel(
       icon: ImageConstant.imgNavProfile,
@@ -121,7 +116,6 @@ class CustomBottomBarState extends State<CustomBottomBar> {
 
 enum BottomBarEnum {
   Home,
-  Add,
   Events,
   Profile,
 }

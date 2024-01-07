@@ -106,8 +106,8 @@ class MartinezcannesItemWidget extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 16.0, // Adjust the position as needed
-          right: 16.0, // Adjust the position as needed
+          bottom: 16.0,
+          right: 16.0,
           child: FloatingActionButton(
             onPressed: () {},
             child: Icon(Icons.add),
