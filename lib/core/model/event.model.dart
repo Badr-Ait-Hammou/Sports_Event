@@ -40,4 +40,9 @@ class Event {
       createdBy: data['createdBy'] ?? '',
     );
   }
+
+  @override
+  String toString() {
+    return 'Event{name: $name, date: $date, location: $location, type: $type, rule: $rule, id: $id, photoUrl: $photoUrl}';
+  }
 }

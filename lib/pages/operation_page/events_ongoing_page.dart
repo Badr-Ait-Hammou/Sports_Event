@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
+import 'package:sport_events/pages/event_details_screen/event_details_screen.dart';
 import 'package:sport_events/pages/operation_page/widgets/eventsPage.dart';
 import '../../../theme/app_decoration.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -13,6 +14,7 @@ import '../../components/custom_outlined_button.dart';
 import '../../core/model/event.model.dart';
 import '../../core/service/event.service.dart';
 import '../../core/utils/image_constant.dart';
+import '../../routes/app_routes.dart';
 import '../../theme/custom_button_style.dart';
 import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
@@ -171,7 +173,34 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                                         CustomButtonStyles.fillPrimaryTL19,
                                     buttonTextStyle:
                                         CustomTextStyles.titleMediumSemiBold,
-                                    onPressed: () {},
+                                    // onPressed: () {
+                                    //   Navigator.pushNamed(context, AppRoutes.eventDetailsScreen);
+                                    // },
+                                    // onPressed: () {
+                                    //   Navigator.pushNamed(context, AppRoutes.eventDetailsScreen, arguments: event);
+                                    //
+                                    // },
+                                    // onPressed: () {
+                                    //   Navigator.pushNamed(
+                                    //     context,
+                                    //     AppRoutes.eventDetailsScreen,
+                                    //     arguments: {'events': event},
+                                    //
+                                    //   );
+                                    //   print("Event details pressed. Event data: ${event.toString()}");
+                                    //
+                                    // },
+
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EventDetailsScreen(event: event),
+                                        ),
+                                      );
+                                    },
+
+
                                   ),
                                 ),
                               ],

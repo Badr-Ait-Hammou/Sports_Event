@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sport_events/core/model/event.model.dart';
+import 'package:sport_events/pages/event_details_screen/event_details_screen.dart';
 import '../../components/custom_bottom_bar.dart';
 import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';
@@ -47,7 +49,7 @@ class HomeContainerScreen extends StatelessWidget {
   }
 
   ///Handling page based on route
-  Widget getCurrentPage(String currentRoute) {
+  Widget getCurrentPage(String currentRoute, {Object? arguments}) {
     switch (currentRoute) {
       case AppRoutes.homeScreen:
         return HomeScreenPage();
@@ -55,6 +57,18 @@ class HomeContainerScreen extends StatelessWidget {
         return EventsOngoingPage();
       case AppRoutes.profileScreen:
         return ProfilePage();
+      case AppRoutes.eventDetailsScreen:
+      // Check if arguments contain 'events' key and if it's of type Event
+        if (arguments != null &&
+            arguments is Map<String, dynamic> &&
+            arguments.containsKey('events') &&
+            arguments['events'] is Event) {
+          return EventDetailsScreen(event: arguments['events']);
+        } else {
+          // If arguments are not valid, you can handle it accordingly
+          // For now, returning a default widget
+          return DefaultWidget();
+        }
       default:
         return DefaultWidget();
     }
