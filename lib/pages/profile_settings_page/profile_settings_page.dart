@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/service/user.service.dart';
+import 'package:sport_events/pages/login_Page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -17,7 +18,6 @@ import '../../theme/custom_button_style.dart';
 import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
 
-// ignore_for_file: must_be_immutable
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key? key}) : super(key: key);
 
@@ -31,104 +31,82 @@ class ProfilePage extends StatelessWidget {
         body: Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 30.v),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              _buildProfile(context),
-              SizedBox(height: 60.v),
-              CustomElevatedButton(
-                  height: 28.v,
-                  width: 134.h,
-                  text: "Edit Profile",
-                  leftIcon: Container(
-                      margin: EdgeInsets.only(right: 20.h),
-                      child: CustomImageView(
-                          imagePath: ImageConstant.imgUser,
-                          height: 28.adaptSize,
-                          width: 28.adaptSize)),
-                  buttonStyle: CustomButtonStyles.none,
-                  buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
-                  onPressed: () {
-                    onTapEditProfile(context);
-                  }),
-              SizedBox(height: 30.v),
-              Row(children: [
-                CustomImageView(
-                    imagePath: ImageConstant.imgIconlyCurvedWallet,
-                    height: 28.adaptSize,
-                    width: 28.adaptSize),
-                Padding(
-                    padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                    child: Text("Payment",
-                        style: CustomTextStyles.titleMediumSemiBold_1))
-              ]),
-              SizedBox(height: 30.v),
-              CustomElevatedButton(
-                  height: 28.v,
-                  width: 148.h,
-                  text: "Notifications",
-                  leftIcon: Container(
-                      margin: EdgeInsets.only(right: 20.h),
-                      child: CustomImageView(
-                          imagePath: ImageConstant.imgIcons,
-                          height: 28.adaptSize,
-                          width: 28.adaptSize)),
-                  buttonStyle: CustomButtonStyles.none,
-                  buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
-                  onPressed: () {
-                    onTapNotifications(context);
-                  }),
-              SizedBox(height: 30.v),
-              CustomElevatedButton(
-                  height: 28.v,
-                  width: 114.h,
-                  text: "Security",
-                  leftIcon: Container(
-                      margin: EdgeInsets.only(right: 20.h),
-                      child: CustomImageView(
-                          imagePath: ImageConstant.imgCheckmarkWhiteA700,
-                          height: 28.adaptSize,
-                          width: 28.adaptSize)),
-                  buttonStyle: CustomButtonStyles.none,
-                  buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
-                  onPressed: () {
-                    onTapSecurity(context);
-                  }),
-              SizedBox(height: 30.v),
-              Row(children: [
-                CustomImageView(
-                    imagePath: ImageConstant.imgIconlyCurvedInfo,
-                    height: 28.adaptSize,
-                    width: 28.adaptSize),
-                Padding(
-                    padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                    child: Text("Help",
-                        style: CustomTextStyles.titleMediumSemiBold_1))
-              ]),
-              SizedBox(height: 30.v),
-              _buildDarkTheme(context),
-              SizedBox(height: 30.v),
-              Row(children: [
-                CustomImageView(
-                    imagePath: ImageConstant.imgRefresh,
-                    height: 28.adaptSize,
-                    width: 28.adaptSize),
-                Padding(
-                  padding: EdgeInsets.only(left: 20.h, top: 5.v),
-                  child: GestureDetector(
-                    onTap: () async {
-                      await UserService().logout();
-
-                      Navigator.pushNamed(context, AppRoutes.loginScreen);
-                    },
-                    child: Text(
-                      "Logout",
-                      style: CustomTextStyles.titleMediumRed400,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  _buildProfile(context),
+                  SizedBox(height: 60.v),
+                  CustomElevatedButton(
+                      height: 28.v,
+                      width: 134.h,
+                      text: "Edit Profile",
+                      leftIcon: Container(
+                          margin: EdgeInsets.only(right: 20.h),
+                          child: CustomImageView(
+                              imagePath: ImageConstant.imgUser,
+                              height: 28.adaptSize,
+                              width: 28.adaptSize)),
+                      buttonStyle: CustomButtonStyles.none,
+                      buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
+                      onPressed: () {
+                        onTapEditProfile(context);
+                      }),
+                  SizedBox(height: 30.v),
+                  CustomElevatedButton(
+                      height: 28.v,
+                      width: 148.h,
+                      text: "Notifications",
+                      leftIcon: Container(
+                          margin: EdgeInsets.only(right: 20.h),
+                          child: CustomImageView(
+                              imagePath: ImageConstant.imgIcons,
+                              height: 28.adaptSize,
+                              width: 28.adaptSize)),
+                      buttonStyle: CustomButtonStyles.none,
+                      buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
+                      onPressed: () {
+                        onTapNotifications(context);
+                      }),
+                  SizedBox(height: 30.v),
+                  CustomElevatedButton(
+                      height: 28.v,
+                      width: 114.h,
+                      text: "Security",
+                      leftIcon: Container(
+                          margin: EdgeInsets.only(right: 20.h),
+                          child: CustomImageView(
+                              imagePath: ImageConstant.imgCheckmarkWhiteA700,
+                              height: 28.adaptSize,
+                              width: 28.adaptSize)),
+                      buttonStyle: CustomButtonStyles.none,
+                      buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
+                      onPressed: () {
+                        onTapSecurity(context);
+                      }),
+                  SizedBox(height: 30.v),
+                  Row(children: [
+                    CustomElevatedButton(
+                      // height: 28.v,
+                      // width: 148.h,
+                      text: "Logout",
+                      leftIcon: Container(
+                          margin: EdgeInsets.only(right: 20.h),
+                          child: CustomImageView(
+                              imagePath: ImageConstant.imgRefresh,
+                              height: 28.adaptSize,
+                              width: 28.adaptSize)),
+                      buttonStyle: CustomButtonStyles.none,
+                      buttonTextStyle: CustomTextStyles.titleMediumSemiBold_1,
+                      onPressed: () async {
+                        await UserService().logout();
+                        Navigator.of(context, rootNavigator: true)
+                            .pushReplacement(MaterialPageRoute(
+                                builder: (context) => LoginPage()));
+                      },
                     ),
-                  ),
-                )
-              ]),
-              SizedBox(height: 5.v)
-            ])));
+                  ]),
+                  SizedBox(height: 5.v)
+                ])));
   }
 
   /// Section Widget
@@ -173,26 +151,6 @@ class ProfilePage extends StatelessWidget {
       Text("Daniel Austin", style: theme.textTheme.headlineSmall),
       SizedBox(height: 11.v),
       Text("uder@domain.com", style: CustomTextStyles.titleSmallWhiteA700)
-    ]);
-  }
-
-  /// Section Widget
-  Widget _buildDarkTheme(BuildContext context) {
-    return Row(children: [
-      CustomImageView(
-          imagePath: ImageConstant.imgEye,
-          height: 28.adaptSize,
-          width: 28.adaptSize),
-      Padding(
-          padding: EdgeInsets.only(left: 20.h, top: 2.v, bottom: 3.v),
-          child: Text("Dark Theme",
-              style: CustomTextStyles.titleMediumSemiBold_1)),
-      Spacer(),
-      CustomSwitch(
-          value: isSelectedSwitch,
-          onChange: (value) {
-            isSelectedSwitch = value;
-          })
     ]);
   }
 

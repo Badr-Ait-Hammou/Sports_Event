@@ -45,7 +45,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
             stream: _firestore.collection('events').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return CircularProgressIndicator();
+                return LinearProgressIndicator();
               }
 
               List<QueryDocumentSnapshot> events = snapshot.data!.docs;
@@ -80,7 +80,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
     String rule = event.rule;
     String participant = event.participant;
     String photoUrl = event.photoUrl;
-
+    print("useer id $currentUserId check !!!!!! ${event.listParticipants.contains(currentUserId)}");
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.v),
       decoration: AppDecoration.outlineBlackC.copyWith(
@@ -172,7 +172,8 @@ class HomeScreenPageState extends State<HomeScreenPage>
                     : Center(
                         child: IconButton(
                           icon: Icon(
-                            Icons.add_alert_outlined,
+                            event.listParticipants.contains(currentUserId) ?
+                            Icons.verified_outlined : Icons.add_alert_outlined,
                             color: Colors.teal,
                           ),
                           onPressed: () async {
@@ -253,7 +254,13 @@ class HomeScreenPageState extends State<HomeScreenPage>
         future: fetchDataFromFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: SizedBox(
+                height: 50.0,
+                width: 50.0,
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
 
           if (snapshot.hasError) {
@@ -270,12 +277,15 @@ class HomeScreenPageState extends State<HomeScreenPage>
             itemCount: eventDataList.length,
             itemBuilder: (context, index) {
               DocumentSnapshot eventData = eventDataList[index];
-              return HotelslistItemWidget(eventData: eventData);
+              return HotelslistItemWidget(
+                eventData: eventData,
+              );
             },
           );
         },
       ),
     );
+
   }
 
   Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {
