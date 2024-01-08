@@ -78,9 +78,11 @@ class HomeScreenPageState extends State<HomeScreenPage>
     String location = event.location;
     String type = event.type;
     String rule = event.rule;
-    String participant = event.participant;
     String photoUrl = event.photoUrl;
-    print("useer id $currentUserId check !!!!!! ${event.listParticipants.contains(currentUserId)}");
+    print(
+        "useer id $currentUserId check !!!!!! ${event.listParticipants.contains(currentUserId)}");
+    int totalParticipants = int.parse(event.participant);
+    int joinedParticipants = event.listParticipants.length;
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.v),
       decoration: AppDecoration.outlineBlackC.copyWith(
@@ -153,7 +155,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "$participant participant",
+                  "$joinedParticipants/$totalParticipants participants",
                   style: CustomTextStyles.headlineSmallPrimary,
                 ),
                 SizedBox(height: 2.v),
@@ -172,13 +174,16 @@ class HomeScreenPageState extends State<HomeScreenPage>
                     : Center(
                         child: IconButton(
                           icon: Icon(
-                            event.listParticipants.contains(currentUserId) ?
-                            Icons.verified_outlined : Icons.add_alert_outlined,
+                            event.listParticipants.contains(currentUserId)
+                                ? Icons.verified_outlined
+                                : Icons.add_alert_outlined,
                             color: Colors.teal,
                           ),
-                          onPressed: () async {
-                            await EventService().joinEvent(event.id);
-                          },
+                          onPressed: (joinedParticipants < totalParticipants)
+                              ? () async {
+                                  await EventService().joinEvent(event.id);
+                                }
+                              : null,
                         ),
                       ),
               ],
@@ -285,7 +290,6 @@ class HomeScreenPageState extends State<HomeScreenPage>
         },
       ),
     );
-
   }
 
   Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {

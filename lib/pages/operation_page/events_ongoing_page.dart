@@ -1,8 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
-import 'package:sport_events/pages/event_details_screen/event_details_screen.dart';
-import 'package:sport_events/pages/operation_page/widgets/eventsPage.dart';
+import 'package:sport_events/pages/operation_page/widgets/chat_page.dart';
 import '../../../theme/app_decoration.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
 import '../../components/app_bar/appbar_title.dart';
@@ -14,7 +12,6 @@ import '../../components/custom_outlined_button.dart';
 import '../../core/model/event.model.dart';
 import '../../core/service/event.service.dart';
 import '../../core/utils/image_constant.dart';
-import '../../routes/app_routes.dart';
 import '../../theme/custom_button_style.dart';
 import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
@@ -81,7 +78,7 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                         padding: EdgeInsets.all(15.h),
                         //margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h),
 
-                      decoration: AppDecoration.outlineBlackC.copyWith(
+                        decoration: AppDecoration.outlineBlackC.copyWith(
                           borderRadius: BorderRadiusStyle.roundedBorder16,
                         ),
                         child: Column(
@@ -173,35 +170,42 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                                         CustomButtonStyles.fillPrimaryTL19,
                                     buttonTextStyle:
                                         CustomTextStyles.titleMediumSemiBold,
-                                    // onPressed: () {
-                                    //   Navigator.pushNamed(context, AppRoutes.eventDetailsScreen);
-                                    // },
-                                    // onPressed: () {
-                                    //   Navigator.pushNamed(context, AppRoutes.eventDetailsScreen, arguments: event);
-                                    //
-                                    // },
-                                    // onPressed: () {
-                                    //   Navigator.pushNamed(
-                                    //     context,
-                                    //     AppRoutes.eventDetailsScreen,
-                                    //     arguments: {'events': event},
-                                    //
-                                    //   );
-                                    //   print("Event details pressed. Event data: ${event.toString()}");
-                                    //
-                                    // },
-
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => EventDetailsScreen(event: event),
-                                        ),
-                                      );
-                                    },
-
-
+                                    onPressed: () {},
                                   ),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.chat),
+                                  onPressed: () {
+                                    // showModalBottomSheet(
+                                    //   context: context,
+                                    //   isScrollControlled: true,
+                                    //   shape: const RoundedRectangleBorder(
+                                    //     borderRadius: BorderRadius.vertical(
+                                    //         top: Radius.circular(20)),
+                                    //   ),
+                                    //   builder: (context) {
+                                    //     return EventChatPage(
+                                    //       modalHeight: MediaQuery.of(context)
+                                    //               .size
+                                    //               .height *
+                                    //           0.95,
+                                    //       eventId: event.id,
+                                    //     );
+                                    //   },
+                                    // );
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return EventChatPage(
+                                          modalHeight: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.9,
+                                          event: event,
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                               ],
                             ),
