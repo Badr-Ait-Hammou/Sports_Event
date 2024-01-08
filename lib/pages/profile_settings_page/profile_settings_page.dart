@@ -86,8 +86,8 @@ class ProfilePage extends StatelessWidget {
                   SizedBox(height: 30.v),
                   Row(children: [
                     CustomElevatedButton(
-                      // height: 28.v,
-                      // width: 148.h,
+                      height: 28.v,
+                      width: 148.h,
                       text: "Logout",
                       leftIcon: Container(
                           margin: EdgeInsets.only(right: 20.h),
