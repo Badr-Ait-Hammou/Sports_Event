@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import '../components/custom_checkbox_button.dart';
 import '../components/custom_elevated_button.dart';
@@ -38,6 +39,8 @@ class _SignUpPageState extends State<SignUpPage> {
         password: passwordController.text,
       );
 
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+
       await FirebaseFirestore.instance
           .collection('users')
           .doc(userCredential.user!.uid)
@@ -45,7 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
         'firstName': fnameController.text,
         'lastName': lnameController.text,
         'email': emailController.text,
-        'events': []
+        'events': [],
+        'tokenId': fcmToken,
       });
 
       Navigator.pushNamed(context, AppRoutes.homeScreen);
