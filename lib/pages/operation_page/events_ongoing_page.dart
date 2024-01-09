@@ -15,6 +15,7 @@ import '../../core/utils/image_constant.dart';
 import '../../theme/custom_button_style.dart';
 import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
+import '../event_details_screen/event_details_screen.dart';
 
 class EventsOngoingPage extends StatefulWidget {
   const EventsOngoingPage({Key? key}) : super(key: key);
@@ -170,7 +171,14 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                                         CustomButtonStyles.fillPrimaryTL19,
                                     buttonTextStyle:
                                         CustomTextStyles.titleMediumSemiBold,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => EventDetailsScreen(event: event),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                                 IconButton(

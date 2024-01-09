@@ -50,6 +50,7 @@ class _SplashPageState extends State<SplashPage> {
               imagePath: ImageConstant.splashimg1,
               height: 420.v,
               width: 428.h,
+              fit: BoxFit.cover,
             ),
             SizedBox(height: 76.v),
             _buildWelcomeSection(context),
@@ -81,7 +82,7 @@ class _SplashPageState extends State<SplashPage> {
             width: 319.h,
             margin: EdgeInsets.only(right: 44.h),
             child: Text(
-              "Empower Your Journey,Have fun , Do some sports",
+              "Redefining Your Sporting Experience, from Planning to Participation",
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: CustomTextStyles.titleMediumSemiBold_1.copyWith(

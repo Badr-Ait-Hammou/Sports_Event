@@ -58,15 +58,12 @@ class HomeContainerScreen extends StatelessWidget {
       case AppRoutes.profileScreen:
         return ProfilePage();
       case AppRoutes.eventDetailsScreen:
-      // Check if arguments contain 'events' key and if it's of type Event
         if (arguments != null &&
             arguments is Map<String, dynamic> &&
             arguments.containsKey('events') &&
             arguments['events'] is Event) {
           return EventDetailsScreen(event: arguments['events']);
         } else {
-          // If arguments are not valid, you can handle it accordingly
-          // For now, returning a default widget
           return DefaultWidget();
         }
       default:

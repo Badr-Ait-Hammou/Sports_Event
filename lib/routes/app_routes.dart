@@ -27,6 +27,5 @@ class AppRoutes {
     homeScreen: (context) => HomeContainerScreen(),
     events: (context) => EventsOngoingPage(),
     addEvent: (context) => AddEventScreen(),
-    eventDetailsScreen: (context, {arguments}) =>
-        EventDetailsScreen(event: arguments['event']),  };
+    eventDetailsScreen: (context, {arguments}) => EventDetailsScreen(event: arguments['event']),  };
 }

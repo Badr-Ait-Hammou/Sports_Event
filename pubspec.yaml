@@ -47,6 +47,7 @@ dependencies:
   firebase_storage: ^11.6.0
   provider: ^6.1.1
   toastification: ^1.1.0
+  flutter_initicon: ^3.0.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

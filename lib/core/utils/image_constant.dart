@@ -3,7 +3,7 @@ class ImageConstant {
   static String imgRectangle1 = '$imagePath/img_rectangle_1.png';
   static String logo = '$imagePath/event.svg';
   static String splashimg = '$imagePath/splashimg.jpg';
-  static String splashimg1 = '$imagePath/sp1.jpg';
+  static String splashimg1 = '$imagePath/eventsplashphoto.svg';
   static String splashimg2 = '$imagePath/sp2.jpg';
 
   static String imgRectangle1420x428 = '$imagePath/img_rectangle_1_420x428.png';
