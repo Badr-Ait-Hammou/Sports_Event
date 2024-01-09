@@ -179,7 +179,9 @@ class HomeScreenPageState extends State<HomeScreenPage>
                                 : Icons.add_alert_outlined,
                             color: Colors.teal,
                           ),
-                          onPressed: (joinedParticipants < totalParticipants)
+                          onPressed: (joinedParticipants < totalParticipants &&
+                                  !event.listParticipants
+                                      .contains(currentUserId))
                               ? () async {
                                   await EventService().joinEvent(event.id);
                                 }
@@ -199,57 +201,58 @@ class HomeScreenPageState extends State<HomeScreenPage>
     super.build(context);
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
-        appBar: CustomAppBar(
-            height: 50.v,
-            leadingWidth: 56.h,
-            leading: AppbarLeadingImage(
-                imagePath: ImageConstant.logo,
-                margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
-            title:
-                AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
-            actions: [
-              AppbarTrailingImage(
-                  imagePath: ImageConstant.imgIcons,
-                  margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
-                  onTap: () {}),
-              AppbarTrailingImage(
-                  imagePath: ImageConstant.imgClock,
-                  margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
-            ]),
-        body: SizedBox(
-            width: mediaQueryData.size.width,
-            child: SingleChildScrollView(
-                child: Column(children: [
-              SizedBox(height: 30.v),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 24.h),
-                      child: Column(children: [
-                        _buildHotelsList(context),
-                        SizedBox(height: 34.v),
-                        _buildRecentlyBookedList(context)
-                      ])))
-            ]))),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Color.fromARGB(255, 123, 122, 122),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              builder: (context) {
-                return AddEventScreen(
-                  modalHeight: MediaQuery.of(context).size.height * 0.95,
-                );
-              },
-            );
-          },
-          tooltip: 'Add',
-          child: Icon(Icons.add),
-        ));
+      appBar: CustomAppBar(
+          height: 50.v,
+          leadingWidth: 56.h,
+          leading: AppbarLeadingImage(
+              imagePath: ImageConstant.logo,
+              margin: EdgeInsets.only(left: 24.h, top: 9.v, bottom: 9.v)),
+          title: AppbarTitle(text: "Home", margin: EdgeInsets.only(left: 16.h)),
+          actions: [
+            AppbarTrailingImage(
+                imagePath: ImageConstant.imgIcons,
+                margin: EdgeInsets.only(left: 24.h, top: 11.v, right: 11.h),
+                onTap: () {}),
+            AppbarTrailingImage(
+                imagePath: ImageConstant.imgClock,
+                margin: EdgeInsets.only(left: 20.h, top: 11.v, right: 35.h))
+          ]),
+      body: SizedBox(
+          width: mediaQueryData.size.width,
+          child: SingleChildScrollView(
+              child: Column(children: [
+            SizedBox(height: 30.v),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                    padding: EdgeInsets.only(left: 24.h),
+                    child: Column(children: [
+                      _buildHotelsList(context),
+                      SizedBox(height: 34.v),
+                      _buildRecentlyBookedList(context)
+                    ])))
+          ]))),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 123, 122, 122),
+        onPressed: () {
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              return AddEventScreen(
+                modalHeight: MediaQuery.of(context).size.height * 0.95,
+              );
+            },
+          );
+        },
+        tooltip: 'Add',
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniStartFloat,
+    );
   }
 
   Widget _buildHotelsList(BuildContext context) {

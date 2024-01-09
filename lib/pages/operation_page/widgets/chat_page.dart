@@ -97,7 +97,9 @@ class EventChatPage extends StatelessWidget {
                       controller: messageText,
                       decoration: InputDecoration(
                         hintText: 'Type your message...',
+                        hintStyle: TextStyle(color: Colors.black54),
                       ),
+                      style: TextStyle(color: Colors.black),
                       onFieldSubmitted: (message) {
                         _sendMessage(message);
                         messageText.clear();

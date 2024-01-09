@@ -17,8 +17,6 @@ class EventService {
     }
   }
 
-
-
   Stream<List<Event>> getEventsStreamForUser() {
     User? user = auth.currentUser;
     String userId = user?.uid ?? '';
@@ -30,22 +28,30 @@ class EventService {
         .asyncMap((userSnapshot) async {
       if (userSnapshot.exists) {
         List<String> userEventIds =
-        List<String>.from(userSnapshot.get('events') ?? []);
+            List<String>.from(userSnapshot.get('events') ?? []);
 
-        QuerySnapshot eventsSnapshot = await firebaseFirestore
+        List<Event> joinedEvents = await firebaseFirestore
             .collection("events")
             .where(FieldPath.documentId, whereIn: userEventIds)
-            .get();
+            .get()
+            .then((eventsSnapshot) => eventsSnapshot.docs
+                .map((doc) => Event.fromFirestore(doc))
+                .toList());
 
-        return eventsSnapshot.docs
-            .map((doc) => Event.fromFirestore(doc))
-            .toList();
+        List<Event> createdEvents = await firebaseFirestore
+            .collection("events")
+            .where('createdBy', isEqualTo: userId)
+            .get()
+            .then((eventsSnapshot) => eventsSnapshot.docs
+                .map((doc) => Event.fromFirestore(doc))
+                .toList());
+
+        return [...joinedEvents, ...createdEvents];
       } else {
         return [];
       }
     });
   }
-
 
   Future<void> joinEvent(String eventId) async {
     try {
@@ -91,11 +97,11 @@ class EventService {
       String userId = user?.uid ?? '';
 
       DocumentSnapshot eventSnapshot =
-      await firebaseFirestore.collection("events").doc(eventId).get();
+          await firebaseFirestore.collection("events").doc(eventId).get();
 
       if (eventSnapshot.exists) {
         List<String> listParticipants = List<String>.from((eventSnapshot.data()
-        as Map<String, dynamic>)['listParticipants'] ??
+                as Map<String, dynamic>)['listParticipants'] ??
             []);
 
         listParticipants.remove(userId);
@@ -123,5 +129,4 @@ class EventService {
       print("Error unjoining event: $error");
     }
   }
-
 }

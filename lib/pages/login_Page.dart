@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import '../components/custom_checkbox_button.dart';
@@ -27,12 +29,23 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   bool rememberme = false;
   bool isVisible = true;
-  signInWithEmailAndPassword() async {
+  signInWithEmailAndPassword(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .update({
+        'tokenId': fcmToken,
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Login successful")),
       );
@@ -162,7 +175,7 @@ class _LoginPageState extends State<LoginPage> {
       CustomElevatedButton(
         text: "Sign In",
         onPressed: () async {
-          await signInWithEmailAndPassword();
+          await signInWithEmailAndPassword(context);
         },
       ),
       SizedBox(height: 28.v),
