@@ -98,23 +98,23 @@ class EventDetailsScreen extends StatelessWidget {
               alignment: Alignment.center,
               child: Container(
 
-                  decoration: AppDecoration.gradient,
+                 // decoration: AppDecoration.gradient,
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         SizedBox(height: 176.v),
-                        SizedBox(
-                            height: 6.v,
-                            child: AnimatedSmoothIndicator(
-                                activeIndex: 0,
-                                count: 5,
-                                effect: ScrollingDotsEffect(
-                                    spacing: 11,
-                                    activeDotColor: theme.colorScheme.primary,
-                                    dotColor: appTheme.gray700,
-                                    dotHeight: 6.v,
-                                    dotWidth: 6.h)))
+                        // SizedBox(
+                        //     height: 6.v,
+                        //     child: AnimatedSmoothIndicator(
+                        //         activeIndex: 0,
+                        //         count: 5,
+                        //         effect: ScrollingDotsEffect(
+                        //             spacing: 11,
+                        //             activeDotColor: theme.colorScheme.primary,
+                        //             dotColor: appTheme.gray700,
+                        //             dotHeight: 6.v,
+                        //             dotWidth: 6.h)))
                       ])))
         ]));
   }
