@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sport_events/core/model/event.model.dart';
 import 'package:sport_events/core/service/event.service.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
@@ -30,10 +31,10 @@ class HomeScreenPageState extends State<HomeScreenPage>
   late final DocumentSnapshot eventData;
   bool get wantKeepAlive => true;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   Widget _buildRecentlyBookedList(BuildContext context) {
     return Column(
@@ -74,19 +75,20 @@ class HomeScreenPageState extends State<HomeScreenPage>
     User? user = auth.currentUser;
     String currentUserId = user?.uid ?? '';
     String name = event.name;
-    String date = event.date;
-    String location = event.location;
+    DateTime dateTime = DateTime.parse(event.date);
+    String formattedDate = "${DateFormat('EE').format(dateTime)}, ${DateFormat('MMM y').format(dateTime)}";    String location = event.location;
     String type = event.type;
-    String rule = event.rule;
     String photoUrl = event.photoUrl;
-    print(
-        "useer id $currentUserId check !!!!!! ${event.listParticipants.contains(currentUserId)}");
+    print("useer id $currentUserId check !!!!!! ${event.listParticipants.contains(currentUserId)}");
     int totalParticipants = int.parse(event.participant);
     int joinedParticipants = event.listParticipants.length;
+    Color borderColor = currentUserId == event.createdBy ? Colors.red : Colors.black;
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 18.v),
       decoration: AppDecoration.outlineBlackC.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder16,
+       // color: borderColor
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -99,10 +101,10 @@ class HomeScreenPageState extends State<HomeScreenPage>
             radius: BorderRadius.circular(
               16.h,
             ),
-            margin: EdgeInsets.symmetric(vertical: 1.v),
+            margin: EdgeInsets.symmetric(vertical: 2.v),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 11.v),
+            padding: EdgeInsets.only(bottom: 5.v),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -110,16 +112,34 @@ class HomeScreenPageState extends State<HomeScreenPage>
                   "$name",
                   style: theme.textTheme.titleLarge,
                 ),
-                SizedBox(height: 18.v),
+                SizedBox(height: 6.v),
                 Text(
-                  "$date-$location",
+                  "$formattedDate",
                   style: theme.textTheme.bodyMedium,
                 ),
-                SizedBox(height: 12.v),
+                SizedBox(height: 6.v),
                 Row(
                   children: [
                     CustomImageView(
-                      imagePath: ImageConstant.imgStarYellowA700,
+                      imagePath: ImageConstant.imgLocation,
+                      height: 12.adaptSize,
+                      width: 12.adaptSize,
+                      margin: EdgeInsets.symmetric(vertical: 2.v),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 4.h),
+                      child: Text(
+                        "$location",
+                        style: theme.textTheme.titleSmall,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6.v),
+                Row(
+                  children: [
+                    CustomImageView(
+                      imagePath: ImageConstant.imgGrid,
                       height: 12.adaptSize,
                       width: 12.adaptSize,
                       margin: EdgeInsets.symmetric(vertical: 2.v),
@@ -129,16 +149,6 @@ class HomeScreenPageState extends State<HomeScreenPage>
                       child: Text(
                         "$type",
                         style: theme.textTheme.titleSmall,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        left: 8.h,
-                        top: 1.v,
-                      ),
-                      child: Text(
-                        "$rule ",
-                        style: theme.textTheme.bodySmall,
                       ),
                     ),
                   ],
@@ -156,9 +166,11 @@ class HomeScreenPageState extends State<HomeScreenPage>
               children: [
                 Text(
                   "$joinedParticipants/$totalParticipants participants",
-                  style: CustomTextStyles.headlineSmallPrimary,
+                  style: CustomTextStyles.titleLargePrimary,
+
+
                 ),
-                SizedBox(height: 2.v),
+                SizedBox(height: 20.v),
                 currentUserId == event.createdBy
                     ? Center(
                         child: IconButton(
@@ -167,7 +179,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
                             color: Colors.teal,
                           ),
                           onPressed: () async {
-                            await EventService().deleteEvent(event.id);
+                            await EventService().deleteEvent(context,event.id);
                           },
                         ),
                       )
@@ -183,9 +195,11 @@ class HomeScreenPageState extends State<HomeScreenPage>
                                   !event.listParticipants
                                       .contains(currentUserId))
                               ? () async {
-                                  await EventService().joinEvent(event.id);
+                                  await EventService().joinEvent(context,event.id);
                                 }
-                              : null,
+                              : () async {
+                            await EventService().unjoinEvent(context,event.id);
+                          },
                         ),
                       ),
               ],
@@ -259,7 +273,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
     return SizedBox(
       height: 400.v,
       child: FutureBuilder<List<DocumentSnapshot>>(
-        future: fetchDataFromFirebase(),
+        future: EventService().fetchDataFromFirebase(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -295,9 +309,5 @@ class HomeScreenPageState extends State<HomeScreenPage>
     );
   }
 
-  Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {
-    QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('events').get();
-    return querySnapshot.docs;
-  }
+
 }

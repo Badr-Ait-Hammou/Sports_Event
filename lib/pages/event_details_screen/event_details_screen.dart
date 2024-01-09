@@ -1,15 +1,10 @@
-import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:sport_events/components/custom_outlined_button.dart';
 import 'package:sport_events/core/service/event.service.dart';
-import 'package:sport_events/pages/event_details_screen/widgets/framenineteen_item_widget.dart';
-import 'package:sport_events/pages/event_details_screen/widgets/rectangle_item_widget.dart';
-
 import '../../components/app_bar/appbar_leading_image.dart';
 import '../../components/app_bar/appbar_title.dart';
 import '../../components/app_bar/appbar_trailing_image.dart';
@@ -359,7 +354,7 @@ class EventDetailsScreen extends StatelessWidget {
                         mapType: MapType.normal,
                         initialCameraPosition: CameraPosition(
                             target:
-                                LatLng(37.43296265331129, -122.08832357078792),
+                                LatLng(31.654576634604926, -8.021011880161618),
                             zoom: 14.4746),
                         onMapCreated: (GoogleMapController controller) {
                           // googleMapController.complete(controller);
@@ -391,11 +386,11 @@ class EventDetailsScreen extends StatelessWidget {
                     imagePath: ImageConstant.imgUser,
                     height: 16.adaptSize,
                     width: 16.adaptSize,
-                    margin: EdgeInsets.only(left: 21.h, bottom: 4.v)),
+                    margin: EdgeInsets.only(left: 21.h, top: 4.v)),
                 Spacer(),
                 GestureDetector(
                     onTap: () {},
-                    child: Text("See All",
+                    child: Text("",
                         style: CustomTextStyles.titleMediumPrimary16))
               ]),
         ]));
@@ -413,14 +408,30 @@ Widget _buildCreatorHeadline(BuildContext context) {
                     imagePath: ImageConstant.imgUser,
                     height: 16.adaptSize,
                     width: 16.adaptSize,
-                    margin: EdgeInsets.only(left: 21.h, bottom: 4.v)),
+                    margin: EdgeInsets.only(left: 21.h, top: 4.v)),
 
                 Spacer(),
                 GestureDetector(
                     onTap: () {},
-                    child: Text("See details",
+                    child: Text("",
                         style: CustomTextStyles.titleMediumPrimary16))
               ]),
+          SizedBox(height: 10.v),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Text(
+                  event.description,
+                  style: CustomTextStyles.labelLargeGray40001,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 5.v),
+          Divider(),
+          SizedBox(height: 5.v),
         ]));
   }
 
@@ -449,9 +460,9 @@ Widget _buildCreatorHeadline(BuildContext context) {
               buttonStyle: CustomButtonStyles.outlineGreenAF,
               onPressed: () {
                 if (event.listParticipants.contains(currentUserId)) {
-                  EventService().unjoinEvent(event.id);
+                  EventService().unjoinEvent(context,event.id);
                 } else {
-                  EventService().joinEvent(event.id);
+                  EventService().joinEvent(context,event.id);
                 }
               })
         ]));

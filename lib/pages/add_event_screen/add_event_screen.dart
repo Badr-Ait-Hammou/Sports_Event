@@ -6,9 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:sport_events/components/app_icons.dart';
+import 'package:sport_events/components/custom_outlined_button.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
+import 'package:sport_events/toasts/toast_notifications.dart';
 import '../../components/custom_elevated_button.dart';
 import 'package:path/path.dart' as path;
+
+import '../../components/custom_image_view.dart';
+import '../../core/utils/image_constant.dart';
 
 class AddEventScreen extends StatefulWidget {
   final double? modalHeight;
@@ -26,6 +32,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   TextEditingController eventTypeController = TextEditingController();
   TextEditingController eventRuleController = TextEditingController();
   TextEditingController eventParticipantsController = TextEditingController();
+  TextEditingController eventDescriptionController = TextEditingController();
   TextEditingController photoUrlController = TextEditingController();
 
   bool get wantKeepAlive => true;
@@ -54,35 +61,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
             imageUrl = image.path;
             img = true;
           });
-        } else {
-          print(
-              "Échec de la mise à jour de l'image, essayez avec une autre image");
+          ToastUtils.showSuccessToast(context, "Done", "Image Uploaded Successfully");
 
-          Fluttertoast.showToast(
-              msg:
-                  "Échec de la mise à jour de l'image, essayez avec une autre image",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0);
+        } else {
+          ToastUtils.showErrorToast(context, "Error", "oops! error adding image ");
         }
-      } else {
+        } else {
         print("Le fichier n'est pas une image");
 
-        Fluttertoast.showToast(
-            msg: "Le fichier n'est pas une image",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        ToastUtils.showErrorToast(context, "Error", "oops! The selected file isn't an image ");
       }
     } catch (e) {
       print("Error selecting image: $e");
-      // Add any specific error handling here
     }
   }
 
@@ -102,6 +92,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
           'date': eventDateController.text,
           'name': eventNameController.text,
           'type': eventTypeController.text,
+          'description': eventDescriptionController.text,
           'location': eventLocationController.text,
           'participant': eventParticipantsController.text,
           'listParticipants': [],
@@ -112,27 +103,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
         Navigator.pop(context);
 
-        Fluttertoast.showToast(
-          msg: "Event added successfully",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
-          textColor: Colors.white,
-          fontSize: 16.0,
-        );
+       ToastUtils.showSuccessToast(context, "Done", "Event Added Successfully");
       });
     } catch (e) {
       print('Error adding event: $e');
-      Fluttertoast.showToast(
-        msg: "Error adding event",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      ToastUtils.showErrorToast(context, "Error", "oops! something went wrong");
+
     }
   }
 
@@ -152,6 +128,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
           children: [
             TextField(
               controller: eventNameController,
+              style: TextStyle(color: Colors.black),
               decoration: const InputDecoration(labelText: 'Event Name'),
             ),
             TextField(
@@ -168,12 +145,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 }
               },
               controller: eventDateController,
+              style: TextStyle(color: Colors.black),
               decoration: const InputDecoration(labelText: 'Event Date'),
             ),
             TextFormField(
               controller: eventLocationController,
               style: TextStyle(color: Colors.black),
               decoration: InputDecoration(labelText: 'City'),
+            ),
+            TextFormField(
+              controller: eventDescriptionController,
+              style: TextStyle(color: Colors.black),
+              decoration: InputDecoration(labelText: 'Description'),
             ),
             TextFormField(
               controller: eventTypeController,
@@ -199,14 +182,28 @@ class _AddEventScreenState extends State<AddEventScreen> {
                       imageUrl,
                       fit: BoxFit.cover,
                     )
-                  : Container(),
+                  : null,
             ),
-            IconButton(
-              onPressed: ajouteImage,
-              icon: Icon(Icons.camera_alt),
+            // IconButton(
+            //   onPressed: ajouteImage,
+            //   icon: Icon(Icons.camera_alt),
+            // ),
+            CustomOutlinedButton(
+                  onPressed: ajouteImage,
+                leftIcon: Container(
+                  margin: EdgeInsets.only(right: 20.h),
+                  child: CustomImageView(
+                    imagePath: ImageConstant.imgGrid,
+                    height: 28.adaptSize,
+                    width: 28.adaptSize,
+                  ),
+
+                ),
+                text: "Select image",
+                margin: EdgeInsets.only(left: 24.h, right: 24.h, bottom: 5.v)
             ),
             const SizedBox(
-              height: 20,
+              height: 5,
             ),
             CustomElevatedButton(
                 onPressed: () async {

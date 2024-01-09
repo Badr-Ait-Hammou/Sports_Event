@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:sport_events/toasts/toast_notifications.dart';
+import 'package:toastification/toastification.dart';
 
 import '../model/event.model.dart';
 
@@ -9,12 +11,19 @@ class EventService {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
-  Future<void> deleteEvent(String id) async {
+  Future<void> deleteEvent(BuildContext context,String id) async {
     try {
       await firebaseFirestore.collection("events").doc(id).delete();
+      ToastUtils.showErrorToast(context, "Done", "event Deleted Successfully");
     } catch (error) {
       print("Error deleting: $error");
     }
+  }
+
+  Future<List<DocumentSnapshot>> fetchDataFromFirebase() async {
+    QuerySnapshot querySnapshot =
+    await FirebaseFirestore.instance.collection('events').get();
+    return querySnapshot.docs;
   }
 
   Stream<List<Event>> getEventsStreamForUser() {
@@ -53,7 +62,7 @@ class EventService {
     });
   }
 
-  Future<void> joinEvent(String eventId) async {
+  Future<void> joinEvent(BuildContext context,String eventId) async {
     try {
       User? user = auth.currentUser;
       String userId = user?.uid ?? '';
@@ -75,14 +84,7 @@ class EventService {
         await firebaseFirestore.collection("users").doc(userId).update({
           'events': FieldValue.arrayUnion([eventId]),
         });
-        Fluttertoast.showToast(
-            msg: "joined succ...",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Color.fromARGB(255, 103, 255, 77),
-            textColor: Colors.black,
-            fontSize: 16.0);
+        ToastUtils.showSuccessToast(context, "Done", "You Joined The Event Successfully");
       } else {
         print("Event not found");
       }
@@ -91,7 +93,7 @@ class EventService {
     }
   }
 
-  Future<void> unjoinEvent(String eventId) async {
+  Future<void> unjoinEvent(BuildContext context,String eventId) async {
     try {
       User? user = auth.currentUser;
       String userId = user?.uid ?? '';
@@ -114,14 +116,8 @@ class EventService {
         await firebaseFirestore.collection("users").doc(userId).update({
           'events': FieldValue.arrayRemove([eventId]),
         });
-        Fluttertoast.showToast(
-            msg: "unjoined succ...",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Color.fromARGB(255, 255, 99, 71),
-            textColor: Colors.black,
-            fontSize: 16.0);
+        ToastUtils.showErrorToast(context, "Done", "You Enjoined The Event Successfully");
+
       } else {
         print("Event not found");
       }

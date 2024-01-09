@@ -187,7 +187,7 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                                   text: "Enjoin",
                                   margin: EdgeInsets.only(right: 6.h),
                                   onPressed: () {
-                                    EventService().unjoinEvent(event.id!);
+                                    EventService().unjoinEvent(context,event.id!);
                                   },
                                 ),
                               ),

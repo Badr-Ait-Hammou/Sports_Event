@@ -6,6 +6,7 @@ class Event {
   String name;
   String type;
   String location;
+  String description;
   String participant;
   List<String> listParticipants;
   String rule;
@@ -17,6 +18,7 @@ class Event {
     required this.date,
     required this.name,
     required this.type,
+    required this.description,
     required this.location,
     required this.participant,
     required this.listParticipants,
@@ -32,6 +34,7 @@ class Event {
       date: data['date'] ?? '',
       name: data['name'] ?? '',
       type: data['type'] ?? '',
+      description: data['description'] ?? '',
       location: data['location'] ?? '',
       participant: data['participant'] ?? '',
       listParticipants: List<String>.from(data['listParticipants'] ?? []),
@@ -43,6 +46,6 @@ class Event {
 
   @override
   String toString() {
-    return 'Event{name: $name, date: $date, location: $location, type: $type, rule: $rule, id: $id, photoUrl: $photoUrl}';
+    return 'Event{name: $name, date: $date, location: $location, type: $type, rule: $rule, id: $id, photoUrl: $photoUrl,description:$description}';
   }
 }
