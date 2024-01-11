@@ -1,18 +1,8 @@
 class ImageConstant {
   static String imagePath = 'assets/images';
-  static String imgRectangle1 = '$imagePath/img_rectangle_1.png';
   static String logo = '$imagePath/event.svg';
-  static String splashimg = '$imagePath/splashimg.jpg';
   static String splashimg1 = '$imagePath/eventsplashphoto.svg';
-  static String splashimg2 = '$imagePath/sp2.jpg';
 
-  static String imgRectangle1420x428 = '$imagePath/img_rectangle_1_420x428.png';
-
-  // Onboarding Two images
-  static String imgRectangle11 = '$imagePath/img_rectangle_1_1.png';
-
-  // Onboarding Three images
-  static String imgRectangle12 = '$imagePath/img_rectangle_1_2.png';
 
   // Let's You In images
   static String imgGroup16 = '$imagePath/img_group_16.svg';
@@ -24,9 +14,6 @@ class ImageConstant {
   static String imgDashboardBlueGray100 =
       '$imagePath/img_dashboard_blue_gray_100.svg';
 
-  // Fill Profile images
-  static String imgEllipse = '$imagePath/img_ellipse.png';
-
   static String imgIconlyCurvedCalendar =
       '$imagePath/img_iconly_curved_calendar.svg';
 
@@ -37,25 +24,14 @@ class ImageConstant {
 
   static String imgFavorite = '$imagePath/img_favorite.svg';
 
-  // Forgot Password images
-  static String imgImage = '$imagePath/img_image.png';
-
   static String imgVolume = '$imagePath/img_volume.svg';
 
   static String imgCheckmarkPrimary = '$imagePath/img_checkmark_primary.svg';
-
-  // Create New Password images
-  static String imgImage300x300 = '$imagePath/img_image_300x300.png';
 
   static String imgLockWhiteA700 = '$imagePath/img_lock_white_a700.svg';
 
   static String imgDashboardWhiteA700 =
       '$imagePath/img_dashboard_white_a700.svg';
-
-  // Home Screen images
-  static String imgRectangle3 = '$imagePath/img_rectangle_3.png';
-
-  static String imgRectangle3400x300 = '$imagePath/img_rectangle_3_400x300.png';
 
   static String imgClockPrimary = '$imagePath/img_clock_primary.svg';
 
@@ -69,8 +45,6 @@ class ImageConstant {
 
   static String imgGrid = '$imagePath/img_grid.svg';
 
-  static String imgRectangle5 = '$imagePath/img_rectangle_5.png';
-
   static String imgNavSearchPrimary = '$imagePath/img_nav_search_primary.svg';
 
   // Search Type images
@@ -80,14 +54,6 @@ class ImageConstant {
   // Hotel Details images
   static String imgArrowLeftWhiteA700 =
       '$imagePath/img_arrow_left_white_a700.svg';
-
-  static String imgRectangle6 = '$imagePath/img_rectangle_6.png';
-
-  static String imgRectangle7 = '$imagePath/img_rectangle_7.png';
-
-  static String imgRectangle8 = '$imagePath/img_rectangle_8.png';
-
-  static String imgRectangle9 = '$imagePath/img_rectangle_9.png';
 
   static String imgFramePrimary = '$imagePath/img_frame_primary.svg';
 
@@ -114,39 +80,7 @@ class ImageConstant {
 
   static String imgVectorPrimary = '$imagePath/img_vector_primary.svg';
 
-  static String imgImage180x380 = '$imagePath/img_image_180x380.png';
-
-  static String imgEllipse1 = '$imagePath/img_ellipse_1.png';
-
-  static String imgEllipse148x48 = '$imagePath/img_ellipse_1_48x48.png';
-
-  static String imgEllipse11 = '$imagePath/img_ellipse_1_1.png';
-
   static String imgArrowdown = '$imagePath/img_arrowdown.svg';
-
-  // Gallery images
-  static String imgRectangle10 = '$imagePath/img_rectangle_10.png';
-
-  static String imgRectangle11140x182 =
-      '$imagePath/img_rectangle_11_140x182.png';
-
-  static String imgRectangle12140x182 =
-      '$imagePath/img_rectangle_12_140x182.png';
-
-  static String imgRectangle13 = '$imagePath/img_rectangle_13.png';
-
-  static String imgRectangle14 = '$imagePath/img_rectangle_14.png';
-
-  static String imgRectangle15 = '$imagePath/img_rectangle_15.png';
-
-  static String imgRectangle16 = '$imagePath/img_rectangle_16.png';
-
-  static String imgRectangle18 = '$imagePath/img_rectangle_18.png';
-
-  static String imgRectangle19 = '$imagePath/img_rectangle_19.png';
-
-  // Location images
-  static String imgImage882x428 = '$imagePath/img_image_882x428.png';
 
   // Select date & Guest images
   static String imgMenuWhiteA70020x20 =
@@ -162,11 +96,6 @@ class ImageConstant {
 
   static String imgClockPrimary15x15 = '$imagePath/img_clock_primary_15x15.svg';
 
-  static String imgTelevision = '$imagePath/img_television.svg';
-
-  // Add New Card images
-  static String imgCard1 = '$imagePath/img_card_1.png';
-
   // View Ticket images
   static String imgGroupBlueGray900 = '$imagePath/img_group_blue_gray_900.svg';
 
@@ -177,16 +106,7 @@ class ImageConstant {
   static String imgCheckmarkPrimary18x18 =
       '$imagePath/img_checkmark_primary_18x18.svg';
 
-  // Booking Cancelled images
-  static String imgWarning = '$imagePath/img_warning.svg';
-
-  // Profile Settings images
-  static String imgEllipse120x120 = '$imagePath/img_ellipse_120x120.png';
-
   static String imgUser = '$imagePath/img_user.svg';
-
-  static String imgIconlyCurvedWallet =
-      '$imagePath/img_iconly_curved_wallet.svg';
 
   static String imgCheckmarkWhiteA700 =
       '$imagePath/img_checkmark_white_a700.svg';
@@ -229,19 +149,9 @@ class ImageConstant {
 
   static String imgBookmark = '$imagePath/img_bookmark.svg';
 
-  static String imgRectangle4 = '$imagePath/img_rectangle_4.png';
-
   static String imgStarYellowA700 = '$imagePath/img_star_yellow_a700.svg';
 
   static String imgBookmarkPrimary = '$imagePath/img_bookmark_primary.svg';
-
-  static String imgRectangle4100x100 = '$imagePath/img_rectangle_4_100x100.png';
-
-  static String imgRectangle41 = '$imagePath/img_rectangle_4_1.png';
-
-  static String imgRectangle42 = '$imagePath/img_rectangle_4_2.png';
-
-  static String imgRectangle43 = '$imagePath/img_rectangle_4_3.png';
 
   static String imgGoogle = '$imagePath/img_google.svg';
 
@@ -272,20 +182,6 @@ class ImageConstant {
 
   static String imgIconlyCurvedCalendarPrimary =
       '$imagePath/img_iconly_curved_calendar_primary.svg';
-
-  static String imgQrcode = '$imagePath/img_qrcode.svg';
-
-  static String imgFrameLightBlue600 =
-      '$imagePath/img_frame_light_blue_600.svg';
-
-  static String imgContrast = '$imagePath/img_contrast.svg';
-
-  static String imgFrameWhiteA70032x32 =
-      '$imagePath/img_frame_white_a700_32x32.svg';
-
-  static String imgImage27x44 = '$imagePath/img_image_27x44.png';
-
-  static String imgRectangle = '$imagePath/img_rectangle.png';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
 }

@@ -6,6 +6,7 @@ class Event {
   String name;
   String type;
   String location;
+  String address;
   String description;
   String participant;
   List<String> listParticipants;
@@ -17,6 +18,7 @@ class Event {
     required this.id,
     required this.date,
     required this.name,
+    required this.address,
     required this.type,
     required this.description,
     required this.location,
@@ -34,6 +36,7 @@ class Event {
       date: data['date'] ?? '',
       name: data['name'] ?? '',
       type: data['type'] ?? '',
+      address:data['address'] ?? '',
       description: data['description'] ?? '',
       location: data['location'] ?? '',
       participant: data['participant'] ?? '',
@@ -46,6 +49,6 @@ class Event {
 
   @override
   String toString() {
-    return 'Event{name: $name, date: $date, location: $location, type: $type, rule: $rule, id: $id, photoUrl: $photoUrl,description:$description}';
+    return 'Event{name: $name, date: $date, location: $location, type: $type, rule: $rule, id: $id, address:$address, photoUrl: $photoUrl,description:$description}';
   }
 }

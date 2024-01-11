@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
-import 'package:sport_events/pages/operation_page/widgets/chat_page.dart';
-import 'package:sport_events/pages/operation_page/widgets/users_list.dart';
+import 'package:sport_events/pages/event_list_page/widgets/chat_page.dart';
+import 'package:sport_events/pages/event_list_page/widgets/users_list.dart';
 import '../../../theme/app_decoration.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
 import '../../components/app_bar/appbar_title.dart';
@@ -19,15 +20,15 @@ import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
 import '../event_details_screen/event_details_screen.dart';
 
-class EventsOngoingPage extends StatefulWidget {
-  const EventsOngoingPage({Key? key}) : super(key: key);
+class MyEventsPage extends StatefulWidget {
+  const MyEventsPage({Key? key}) : super(key: key);
 
   @override
-  EventsOngoingPageState createState() => EventsOngoingPageState();
+  MyEventsPageState createState() => MyEventsPageState();
 }
 
-class EventsOngoingPageState extends State<EventsOngoingPage>
-    with AutomaticKeepAliveClientMixin<EventsOngoingPage> {
+class MyEventsPageState extends State<MyEventsPage>
+    with AutomaticKeepAliveClientMixin<MyEventsPage> {
   @override
   bool get wantKeepAlive => true;
 
@@ -39,10 +40,12 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
     _eventsStream = EventService().getEventsStreamForUser();
   }
 
-  @override
+
+    @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
+
       appBar: CustomAppBar(
         height: 50.v,
         leadingWidth: 56.h,
@@ -114,7 +117,7 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    event.date + ' ' + event.location,
+                                    event.date + ' ' + event.address,
                                     style: theme.textTheme.titleLarge,
                                   ),
                                   SizedBox(height: 10.v),
@@ -209,8 +212,36 @@ class EventsOngoingPageState extends State<EventsOngoingPage>
                                 },
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.chat),
+                            // IconButton(
+                            //   icon: Icon(Icons.chat),
+                            //   onPressed: () {
+                            //     showDialog(
+                            //       context: context,
+                            //       builder: (context) {
+                            //         return EventChatPage(
+                            //           modalHeight:
+                            //           MediaQuery.of(context).size.height *
+                            //               0.9,
+                            //           event: event,
+                            //         );
+                            //       },
+                            //     );
+                            //   },
+                            // ),
+
+                            CustomOutlinedButton(
+                              height: 32.v,
+                              width: 30.h,
+                              text: "",
+                              margin: EdgeInsets.only(left: 8.h),
+
+                              leftIcon: Container(
+                                child: CustomImageView(
+                                  imagePath: ImageConstant.imgVolume,
+                                  height: 12.adaptSize,
+                                  width: 12.adaptSize,
+                                ),
+                              ),
                               onPressed: () {
                                 showDialog(
                                   context: context,

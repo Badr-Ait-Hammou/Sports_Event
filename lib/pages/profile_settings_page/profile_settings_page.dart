@@ -119,16 +119,19 @@ class ProfilePage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Update Profile"),
+          title: Text("Update Profile", style: TextStyle(color: Colors.black),),
           content: Column(
             children: [
               TextField(
                 controller: firstNameController,
                 decoration: InputDecoration(labelText: 'First Name'),
+                style: TextStyle(color: Colors.black),
               ),
               TextField(
                 controller: lastNameController,
                 decoration: InputDecoration(labelText: 'Last Name'),
+                style: TextStyle(color: Colors.black),
+
               ),
             ],
           ),

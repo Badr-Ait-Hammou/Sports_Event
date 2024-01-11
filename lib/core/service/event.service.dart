@@ -74,7 +74,6 @@ class EventService {
         List<String> listParticipants = List<String>.from((eventSnapshot.data()
                 as Map<String, dynamic>)['listParticipants'] ??
             []);
-
         listParticipants.add(userId);
         await firebaseFirestore
             .collection("events")
@@ -92,6 +91,9 @@ class EventService {
       print("Error joining event: $error");
     }
   }
+
+
+
 
   Future<void> unjoinEvent(BuildContext context,String eventId) async {
     try {

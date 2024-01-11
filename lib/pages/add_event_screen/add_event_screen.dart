@@ -1,18 +1,18 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:sport_events/components/app_icons.dart';
 import 'package:sport_events/components/custom_outlined_button.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
 import 'package:sport_events/toasts/toast_notifications.dart';
 import '../../components/custom_elevated_button.dart';
 import 'package:path/path.dart' as path;
-
+import 'package:latlong2/latlong.dart';
 import '../../components/custom_image_view.dart';
 import '../../core/utils/image_constant.dart';
 
@@ -28,7 +28,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   TextEditingController eventNameController = TextEditingController();
   TextEditingController eventDateController = TextEditingController();
-  TextEditingController eventLocationController = TextEditingController();
+  TextEditingController eventAddressController = TextEditingController();
   TextEditingController eventTypeController = TextEditingController();
   TextEditingController eventRuleController = TextEditingController();
   TextEditingController eventParticipantsController = TextEditingController();
@@ -41,10 +41,18 @@ class _AddEventScreenState extends State<AddEventScreen> {
   bool img = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+
+
+
   @override
   void initState() {
     super.initState();
   }
+  MapController mapController = MapController();
+
+
+  double selectedLatitude = 31.61745401573268;
+  double selectedLongitude = -7.990670745531067;
 
   Future<void> ajouteImage() async {
     try {
@@ -93,7 +101,9 @@ class _AddEventScreenState extends State<AddEventScreen> {
           'name': eventNameController.text,
           'type': eventTypeController.text,
           'description': eventDescriptionController.text,
-          'location': eventLocationController.text,
+          'address': eventAddressController.text,
+          'location': '$selectedLatitude, $selectedLongitude',
+
           'participant': eventParticipantsController.text,
           'listParticipants': [],
           'rule': eventRuleController.text,
@@ -149,15 +159,40 @@ class _AddEventScreenState extends State<AddEventScreen> {
               decoration: const InputDecoration(labelText: 'Event Date'),
             ),
             TextFormField(
-              controller: eventLocationController,
+              controller: eventAddressController,
               style: TextStyle(color: Colors.black),
-              decoration: InputDecoration(labelText: 'City'),
+              decoration: InputDecoration(labelText: 'Address'),
             ),
             TextFormField(
               controller: eventDescriptionController,
               style: TextStyle(color: Colors.black),
               decoration: InputDecoration(labelText: 'Description'),
             ),
+            Container(
+              height: 200,
+              child: FlutterMap(
+                mapController: mapController,
+                options: MapOptions(
+                  center: LatLng(selectedLatitude, selectedLongitude),
+                  zoom: 9,
+                  onTap: (TapPosition tapPosition, LatLng latLng) {
+                    setState(() {
+                      selectedLatitude = latLng.latitude;
+                      selectedLongitude = latLng.longitude;
+                      print("Selected Latitude: $selectedLatitude, Longitude: $selectedLongitude");
+
+                    });
+                  },
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.app',
+                  ),
+                ],
+              ),
+            ),
+
             TextFormField(
               controller: eventTypeController,
               style: TextStyle(color: Colors.black),

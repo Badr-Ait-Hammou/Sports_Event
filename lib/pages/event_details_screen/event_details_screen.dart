@@ -1,8 +1,9 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_initicon/flutter_initicon.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:sport_events/components/custom_outlined_button.dart';
 import 'package:sport_events/core/service/event.service.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -92,25 +93,12 @@ class EventDetailsScreen extends StatelessWidget {
           Align(
               alignment: Alignment.center,
               child: Container(
-
-                 // decoration: AppDecoration.gradient,
                   child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        SizedBox(height: 176.v),
-                        // SizedBox(
-                        //     height: 6.v,
-                        //     child: AnimatedSmoothIndicator(
-                        //         activeIndex: 0,
-                        //         count: 5,
-                        //         effect: ScrollingDotsEffect(
-                        //             spacing: 11,
-                        //             activeDotColor: theme.colorScheme.primary,
-                        //             dotColor: appTheme.gray700,
-                        //             dotHeight: 6.v,
-                        //             dotWidth: 6.h)))
-                      ])))
+                    SizedBox(height: 176.v),
+                  ])))
         ]));
   }
 
@@ -118,8 +106,32 @@ class EventDetailsScreen extends StatelessWidget {
   Widget _buildHotelDetails(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.h),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(event.name + " Event", style: theme.textTheme.headlineLarge),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                Text(event.name + " Event", style: theme.textTheme.headlineLarge),
+                Spacer(),
+                CustomOutlinedButton(
+                  height: 40.v,
+                  width: 50.h,
+                  leftIcon: Icon(Icons.share),
+                  text: "",
+                  margin: EdgeInsets.only(left: 17.h),
+                  //buttonStyle: CustomButtonStyles.outlineGreenAF,
+                  onPressed: () {
+                    Share.share(
+                        '''
+              🌟 Check Out This Event 🎉
+              📅 Date: ${event.date}
+              📍 Address: ${event.address}
+              ✨ Name: ${event.name}
+              🚀 Type: ${event.type}
+              📜 Rule: ${event.rule}
+              '''
+                    );
+                  },
+                )
+              ],),
           SizedBox(height: 15.v),
           Row(children: [
             CustomImageView(
@@ -128,7 +140,7 @@ class EventDetailsScreen extends StatelessWidget {
                 width: 20.adaptSize),
             Padding(
                 padding: EdgeInsets.only(left: 8.h),
-                child: Text(event.location,
+                child: Text(event.address,
                     style: CustomTextStyles.bodyMediumGray50_1)),
             Spacer(),
             CustomOutlinedButton(
@@ -214,9 +226,10 @@ class EventDetailsScreen extends StatelessWidget {
                                 } else {
                                   Map<String, dynamic> participantInfo =
                                       snapshot.data as Map<String, dynamic>;
-                                  String firstName =
-                                      participantInfo['firstName'];
+                                  String firstName = participantInfo['firstName'];
                                   String lastName = participantInfo['lastName'];
+                                  String email = participantInfo['email'];
+
 
                                   return Column(
                                     crossAxisAlignment:
@@ -228,7 +241,7 @@ class EventDetailsScreen extends StatelessWidget {
                                       ),
                                       SizedBox(height: 2.v),
                                       Text(
-                                        "Dec 10, 2024",
+                                        "$email",
                                         style: CustomTextStyles
                                             .labelLargeGray40001,
                                       ),
@@ -237,24 +250,6 @@ class EventDetailsScreen extends StatelessWidget {
                                 }
                               },
                             ),
-                          ),
-                          Spacer(),
-                          CustomElevatedButton(
-                            height: 32.v,
-                            width: 60.h,
-                            text: "5",
-                            margin: EdgeInsets.symmetric(vertical: 8.v),
-                            leftIcon: Container(
-                              margin: EdgeInsets.only(right: 8.h),
-                              child: CustomImageView(
-                                imagePath: ImageConstant.imgStar,
-                                height: 12.adaptSize,
-                                width: 12.adaptSize,
-                              ),
-                            ),
-                            buttonStyle: CustomButtonStyles.fillPrimaryTL16,
-                            buttonTextStyle:
-                                CustomTextStyles.titleSmallWhiteA700,
                           ),
                         ],
                       )));
@@ -288,7 +283,7 @@ class EventDetailsScreen extends StatelessWidget {
                 return Text("Error loading creator info");
               } else {
                 Map<String, dynamic> creatorInfo =
-                snapshot.data as Map<String, dynamic>;
+                    snapshot.data as Map<String, dynamic>;
                 String creatorFirstName = creatorInfo['firstName'];
                 String creatorLastName = creatorInfo['lastName'];
                 String creatorEmail = creatorInfo['email'];
@@ -335,41 +330,41 @@ class EventDetailsScreen extends StatelessWidget {
     );
   }
 
-
   /// Section Widget
   Widget _buildLocation(BuildContext context) {
+    List<String> locationParts = event.location.split(', ');
+    double eventLatitude = double.parse(locationParts[0]);
+    double eventLongitude = double.parse(locationParts[1]);
+    var marker = Marker(
+      point: LatLng(eventLatitude, eventLongitude),
+      child: Icon(Icons.location_pin, color: Colors.red),
+    );
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text("Location", style: theme.textTheme.titleMedium),
           SizedBox(height: 18.v),
-          SizedBox(
-              height: 180.v,
-              width: 380.h,
-              child: Stack(alignment: Alignment.center, children: [
-                SizedBox(
-                    height: 180.v,
-                    width: 380.h,
-                    child: GoogleMap(
-                        mapType: MapType.normal,
-                        initialCameraPosition: CameraPosition(
-                            target:
-                                LatLng(31.654576634604926, -8.021011880161618),
-                            zoom: 14.4746),
-                        onMapCreated: (GoogleMapController controller) {
-                          // googleMapController.complete(controller);
-                        },
-                        zoomControlsEnabled: false,
-                        zoomGesturesEnabled: false,
-                        myLocationButtonEnabled: false,
-                        myLocationEnabled: false)),
-                CustomImageView(
-                    imagePath: ImageConstant.imgLocation,
-                    height: 40.adaptSize,
-                    width: 40.adaptSize,
-                    alignment: Alignment.center)
-              ]))
-        ]));
+          Container(
+            height: 200,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: FlutterMap(
+                options: MapOptions(
+                  center: LatLng(eventLatitude, eventLongitude),
+                  zoom: 15,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.app',
+                  ),
+                  MarkerLayer(markers: [marker]),
+                ],
+              ),
+            ),
+          ),
+        ])
+    );
   }
 
   /// Section Widget
@@ -390,12 +385,13 @@ class EventDetailsScreen extends StatelessWidget {
                 Spacer(),
                 GestureDetector(
                     onTap: () {},
-                    child: Text("",
-                        style: CustomTextStyles.titleMediumPrimary16))
+                    child:
+                        Text("", style: CustomTextStyles.titleMediumPrimary16))
               ]),
         ]));
   }
-Widget _buildCreatorHeadline(BuildContext context) {
+
+  Widget _buildCreatorHeadline(BuildContext context) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 24.h),
         child: Column(children: [
@@ -403,23 +399,20 @@ Widget _buildCreatorHeadline(BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("The Event Creator", style: theme.textTheme.titleMedium),
+                Text("Description", style: theme.textTheme.titleMedium),
                 CustomImageView(
-                    imagePath: ImageConstant.imgUser,
+                    imagePath: ImageConstant.imgFavoriteWhiteA700,
                     height: 16.adaptSize,
                     width: 16.adaptSize,
-                    margin: EdgeInsets.only(left: 21.h, top: 4.v)),
-
+                    margin: EdgeInsets.only(left: 15.h, top: 4.v)),
                 Spacer(),
                 GestureDetector(
-                    onTap: () {},
-                    child: Text("",
-                        style: CustomTextStyles.titleMediumPrimary16))
+                    child: Text("", style: CustomTextStyles.titleMediumPrimary16))
               ]),
           SizedBox(height: 10.v),
           Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Flexible(
                 child: Text(
@@ -429,9 +422,25 @@ Widget _buildCreatorHeadline(BuildContext context) {
               ),
             ],
           ),
-          SizedBox(height: 5.v),
+          SizedBox(height: 10.v),
           Divider(),
-          SizedBox(height: 5.v),
+          SizedBox(height: 10.v),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("The Event Creator", style: theme.textTheme.titleMedium),
+                CustomImageView(
+                    imagePath: ImageConstant.imgUser,
+                    height: 16.adaptSize,
+                    width: 16.adaptSize,
+                    margin: EdgeInsets.only(left: 15.h, top: 4.v)),
+                Spacer(),
+                GestureDetector(
+                    onTap: () {},
+                    child:
+                    Text("", style: CustomTextStyles.titleMediumPrimary16))
+              ]),
         ]));
   }
 
@@ -452,19 +461,22 @@ Widget _buildCreatorHeadline(BuildContext context) {
                   style: CustomTextStyles.bodyMediumGray40001)),
           CustomElevatedButton(
               height: 58.v,
-              width: 263.h,
+              width: 250.h,
               text: event.listParticipants.contains(currentUserId)
                   ? "Enjoin"
-                  : "Join Now",
+                  : (event.createdBy == currentUserId ? "Delete Event" : "Join Now"),
               margin: EdgeInsets.only(left: 17.h),
               buttonStyle: CustomButtonStyles.outlineGreenAF,
               onPressed: () {
                 if (event.listParticipants.contains(currentUserId)) {
-                  EventService().unjoinEvent(context,event.id);
-                } else {
-                  EventService().joinEvent(context,event.id);
+                  EventService().unjoinEvent(context, event.id);
+                } else if(event.createdBy== currentUserId){
+                  EventService().deleteEvent(context, event.id);
+                }else{
+                  EventService().joinEvent(context, event.id);
                 }
-              })
+              }),
+
         ]));
   }
 }

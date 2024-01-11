@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
 import 'package:sport_events/core/model/event.model.dart';
 import 'package:sport_events/core/service/event.service.dart';
+import 'package:sport_events/core/service/user.service.dart';
 import 'package:sport_events/core/utils/size_utils.dart';
 import 'package:sport_events/pages/add_event_screen/add_event_screen.dart';
-import 'package:sport_events/pages/home_screen_page/widgets/hotelslist_item_widget.dart';
+import 'package:sport_events/pages/home_screen_page/widgets/home_slider_widget.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
 import '../../components/app_bar/appbar_leading_image.dart';
@@ -30,11 +32,21 @@ class HomeScreenPageState extends State<HomeScreenPage>
   final FirebaseAuth auth = FirebaseAuth.instance;
   late final DocumentSnapshot eventData;
   bool get wantKeepAlive => true;
+  Map<String, dynamic>? userData;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+
+  MapController mapController = MapController();
+
+  @override
+  void initState() {
+    super.initState();
+    String currentUserId = auth.currentUser?.uid ?? '';
+    UserService().getUserInfoById(currentUserId).then((user) {
+      setState(() {
+        userData = user;
+      });
+    });
+  }
 
   Widget _buildRecentlyBookedList(BuildContext context) {
     return Column(
@@ -76,7 +88,9 @@ class HomeScreenPageState extends State<HomeScreenPage>
     String currentUserId = user?.uid ?? '';
     String name = event.name;
     DateTime dateTime = DateTime.parse(event.date);
-    String formattedDate = "${DateFormat('EE').format(dateTime)}, ${DateFormat('MMM y').format(dateTime)}";    String location = event.location;
+    String formattedDate = "${DateFormat('EE').format(dateTime)}, ${DateFormat('MMM y').format(dateTime)}";
+    String location = event.location;
+    String address = event.address;
     String type = event.type;
     String photoUrl = event.photoUrl;
     print("useer id $currentUserId check !!!!!! ${event.listParticipants.contains(currentUserId)}");
@@ -129,7 +143,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
                     Padding(
                       padding: EdgeInsets.only(left: 4.h),
                       child: Text(
-                        "$location",
+                        "$address",
                         style: theme.textTheme.titleSmall,
                       ),
                     ),
@@ -212,6 +226,13 @@ class HomeScreenPageState extends State<HomeScreenPage>
 
   @override
   Widget build(BuildContext context) {
+    // User? user = auth.currentUser;
+    // String currentUserId = user?.uid ?? '';
+    // UserService().getUserInfoById(currentUserId).then((user) {
+    //   setState(() {
+    //     userData = user;
+    //   });
+    // });
     super.build(context);
     mediaQueryData = MediaQuery.of(context);
     return Scaffold(
@@ -238,9 +259,22 @@ class HomeScreenPageState extends State<HomeScreenPage>
             SizedBox(height: 30.v),
             Align(
                 alignment: Alignment.centerRight,
+
                 child: Padding(
                     padding: EdgeInsets.only(left: 24.h),
                     child: Column(children: [
+                      SizedBox(
+                          width: double.maxFinite,
+                          child: Column(children: [
+                            SizedBox(height: 10.v),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                    padding: EdgeInsets.only(right: 24.h),
+                                    child: Text(userData != null ? "Hello, ${userData!['firstName']} 👋" : "Hello,👋",
+                                        style: theme.textTheme.headlineLarge)))
+                          ])),
+                      SizedBox(height: 40.v),
                       _buildHotelsList(context),
                       SizedBox(height: 34.v),
                       _buildRecentlyBookedList(context)
@@ -299,7 +333,7 @@ class HomeScreenPageState extends State<HomeScreenPage>
             itemCount: eventDataList.length,
             itemBuilder: (context, index) {
               DocumentSnapshot eventData = eventDataList[index];
-              return HotelslistItemWidget(
+              return HomeTopSliderWidget(
                 eventData: eventData,
               );
             },

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:sport_events/core/model/event.model.dart';
 import 'package:sport_events/pages/event_details_screen/event_details_screen.dart';
+import 'package:sport_events/pages/event_list_page/my_events_page.dart';
 import '../../components/custom_bottom_bar.dart';
 import '../../core/utils/size_utils.dart';
 import '../../routes/app_routes.dart';
 import '../home_screen_page/home_screen_page.dart';
-import '../operation_page/events_ongoing_page.dart';
 import '../profile_settings_page/profile_settings_page.dart';
 
-// ignore_for_file: must_be_immutable
 class HomeContainerScreen extends StatelessWidget {
   HomeContainerScreen({Key? key}) : super(key: key);
 
@@ -54,7 +53,7 @@ class HomeContainerScreen extends StatelessWidget {
       case AppRoutes.homeScreen:
         return HomeScreenPage();
       case AppRoutes.events:
-        return EventsOngoingPage();
+        return MyEventsPage();
       case AppRoutes.profileScreen:
         return ProfilePage();
       case AppRoutes.eventDetailsScreen:

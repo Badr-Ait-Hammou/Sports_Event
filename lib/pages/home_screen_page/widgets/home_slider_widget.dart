@@ -9,16 +9,17 @@ import '../../../theme/custom_button_style.dart';
 import '../../../theme/custom_text_style.dart';
 import '../../../theme/theme_helper.dart';
 
-class HotelslistItemWidget extends StatelessWidget {
+class HomeTopSliderWidget extends StatelessWidget {
   final DocumentSnapshot eventData;
 
-  const HotelslistItemWidget({Key? key, required this.eventData})
+  const HomeTopSliderWidget({Key? key, required this.eventData})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     String name = eventData['name'] ?? '';
     String location = eventData['location'] ?? '';
+    String address = eventData['address'] ?? '';
     String type = eventData['type'] ?? '';
     String rule = eventData['rule'] ?? '';
     String participant = eventData['participant'] ?? '';
@@ -71,7 +72,7 @@ class HotelslistItemWidget extends StatelessWidget {
                           CustomElevatedButton(
                             height: 32.v,
                             width: 100.h,
-                            text: location,
+                            text: address,
                             margin: EdgeInsets.only(right: 10.h),
                             leftIcon: Container(
                               margin: EdgeInsets.only(right: 2.h),

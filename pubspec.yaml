@@ -29,13 +29,12 @@ dependencies:
   flutter:
     sdk: flutter
   cached_network_image: ^3.2.1
-  flutter_svg: ^1.1.6
+  flutter_svg: ^2.0.7
   pin_code_fields: ^7.3.0
   smooth_page_indicator: ^1.0.0+2
   grouped_list: ^5.1.2
-  google_maps_flutter: ^2.0.0
   table_calendar: ^3.0.6
-  flutter_svg_provider: ^1.0.3
+  flutter_svg_provider: ^1.0.5
   qr_flutter: ^4.1.0
   intl: ^0.18.0
   url_launcher: 6.0.20
@@ -51,6 +50,9 @@ dependencies:
   firebase_messaging: ^14.7.10
   flutter_local_notifications: ^16.3.0
   latlong2: ^0.9.0
+  flutter_map: ^6.1.0
+  flutter_map_marker_popup: ^6.1.2
+  share_plus: ^7.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
